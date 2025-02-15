@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarcShop - Boutique en ligne</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">MarcShop</div>
+        <input type="text" id="search-bar" placeholder="Rechercher un produit...">
+        <nav>
+            <a href="accueil.html">Accueil</a>
+            <a href="produits.html">Produits</a>
+            <a href="categories.html">Catégories</a>
+            <a href="compte.html">Compte</a>
+            <a href="suivie.html">Suivie</a>
+            <a href="panier.html" id="cart-btn">Panier (<span id="cart-count">0</span>)</a>
+        </nav>
+    </header>
+
+    <section class="banner">
+        <h1>Bienvenue sur MarcShop</h1>
+        <p>Livraison gratuite sur toutes vos commandes !</p>
+    </section>
+
+    <section class="address-section">
+        <h3>Adresse de livraison</h3>
+        <label for="customerAddress">Entrez votre adresse :</label>
+        <input type="text" id="customerAddress" placeholder="Ex: 12 rue Exemple, Paris">
+        <button id="saveAddressButton">Enregistrer</button>
+    </section>
+
+    <h2>Nos produits</h2>
+    <section class="products" id="products-container">
+        <!-- Les produits seront affichés ici dynamiquement -->
+    </section>
+
+    <footer>
+        <p>© 2025 MarcShop - Tous droits réservés</p>
+        <a href="#">Télécharger l'application</a>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - MarcShop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">MarcShop Admin</div>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="admin.html">Administration</a>
+            <a href="suivie.html">Suivi des commandes</a>
+        </nav>
+    </header>
+
+    <section class="admin-dashboard">
+        <h1>Gestion des produits</h1>
+
+        <h3>Ajouter un produit</h3>
+        <form id="add-product-form">
+            <label for="product-name">Nom du produit :</label>
+            <input type="text" id="product-name" required>
+
+            <label for="product-description">Description :</label>
+            <textarea id="product-description" required></textarea>
+
+            <label for="product-price">Prix :</label>
+            <input type="number" id="product-price" required>
+
+            <label for="product-image">URL de l'image :</label>
+            <input type="text" id="product-image" required>
+
+            <button type="submit">Ajouter le produit</button>
+        </form>
+
+        <h3>Liste des produits</h3>
+        <div id="product-list">
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 MarcShop - Tous droits réservés</p>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+</html>

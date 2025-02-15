@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Panier - MarcShop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Votre Panier</h1>
+    <ul id="cart-list"></ul>
+    <p id="total-price">Total: 0 $</p>
+    <button onclick="clearCart()">Vider le panier</button>
+    <button onclick="checkout()">Passer la commande</button>
+
+    <script src="panier.js"></script>
+</body>
+</html><script src="https://www.paypal.com/sdk/js?client-id=ActOWDtEW7VcCkWDjChLthGFW3vlmi_AnhWBjGEk2nL7hYsCQ6O03H64tDXX6PliIW39E-OgIx1XQypx&components=buttons"></script>
+
+<div id="paypal-button-container"></div>
+
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: 100 // Remplacer par le total de la commande
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                alert('Transaction réussie ! Merci, ' + details.payer.name.given_name);
+                // Optionnel : enregistrer les détails de la commande dans ta base de données (LocalStorage ou backend)
+                localStorage.removeItem('cart'); // Vider le panier après paiement
+                window.location.href = 'confirmation.html'; // Page de confirmation
+            });
+        },
+        onError: function(err) {
+            console.error("Erreur de paiement", err);
+            alert("Une erreur est survenue, veuillez réessayer.");
+        }
+    }).render('#paypal-button-container');
+</script>

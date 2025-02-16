@@ -7,9 +7,15 @@ document.addEventListener('DOMContentLoaded', function() {
         let price = parseFloat(document.getElementById("product-price").value.trim());
         let image = document.getElementById("product-image").value.trim();
 
+        // Vérifie que tous les champs sont remplis
         if (!name || !description || isNaN(price) || !image) {
             alert("Tous les champs sont requis !");
             return;
+        }
+
+        // Vérifie si l'image est définie, sinon utilise 'default.jpg'
+        if (!image) {
+            image = 'default.jpg';
         }
 
         let products = JSON.parse(localStorage.getItem("products")) || [];
@@ -41,11 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
+            const productImage = product.image || 'default.jpg'; // Utilise 'default.jpg' si l'image n'est pas définie
             productElement.innerHTML = `
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <p>Prix : ${product.price} $</p>
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${productImage}" alt="${product.name}">
             `;
             productList.appendChild(productElement);
         });

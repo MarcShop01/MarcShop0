@@ -1,63 +1,55 @@
-
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("add-product-form");
-    const productList = document.getElementById("product-list");
-
-    let produits = JSON.parse(localStorage.getItem("produits")) || [];
-    let produitEnCours = null;
-
-    function afficherProduits() {
-        productList.innerHTML = "";
-        produits.forEach((produit, index) => {
-            productList.innerHTML += `
-                <div>
-                    <img src="${produit.image}" width="100">
-                    <h3>${produit.nom}</h3>
-                    <p>${produit.description}</p>
-                    <p><strong>${produit.prix}€</strong></p>
-                    <button onclick="modifierProduit(${index})">Modifier</button>
-                    <button onclick="supprimerProduit(${index})">Supprimer</button>
-                </div>
-            `;
-        });
-    }
-    form.addEventListener("submit", (e) => {
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("add-product-form").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        let produit = {
-            nom: document.getElementById("product-name").value,
-            description: document.getElementById("product-description").value,
-            prix: document.getElementById("product-price").value,
-            image: document.getElementById("product-image").value
-        };
+        let name = document.getElementById("product-name").value.trim();
+        let description = document.getElementById("product-description").value.trim();
+        let price = parseFloat(document.getElementById("product-price").value.trim());
+        let image = document.getElementById("product-image").value.trim();
 
-        if (produitEnCours === null) {
-            produits.push(produit);
-        } else {
-            produits[produitEnCours] = produit;
-            produitEnCours = null;
+        if (!name || !description || isNaN(price) || !image) {
+            alert("Tous les champs sont requis !");
+            return;
         }
 
-        localStorage.setItem("produits", JSON.stringify(produits));
-        form.reset();
-        afficherProduits();
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        let newProduct = {
+            name: name,
+            description: description,
+            price: price,
+            image: image
+        };
+
+        products.push(newProduct);
+        localStorage.setItem("products", JSON.stringify(products));
+
+        alert("Produit ajouté avec succès !");
+        displayProducts();
     });
 
-    window.supprimerProduit = (index) => {
-        produits.splice(index, 1);
-        localStorage.setItem("produits", JSON.stringify(produits));
-        afficherProduits();
-    };
+    function displayProducts() {
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+        let productList = document.getElementById("product-list");
+        productList.innerHTML = "";
 
-    window.modifierProduit = (index) => {
-        let produit = produits[index];
-        document.getElementById("product-name").value = produit.nom;
-        document.getElementById("product-description").value = produit.description;
-        document.getElementById("product-price").value = produit.prix;
-        document.getElementById("product-image").value = produit.image;
+        if (products.length === 0) {
+            productList.innerHTML = "<p>Aucun produit disponible.</p>";
+            return;
+        }
 
-        produitEnCours = index;
-    };
+        products.forEach(product => {
+            let productElement = document.createElement("div");
+            productElement.className = "product";
+            productElement.innerHTML = `
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>Prix : ${product.price} $</p>
+                <img src="${product.image}" alt="${product.name}">
+            `;
+            productList.appendChild(productElement);
+        });
+    }
 
-    afficherProduits();
+    displayProducts();
 });

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let email = document.getElementById("email").value.trim();
         let password = document.getElementById("password").value.trim();
-
+        
         let users = JSON.parse(localStorage.getItem("users")) || [];
         let user = users.find(user => user.email === email && user.password === password);
 

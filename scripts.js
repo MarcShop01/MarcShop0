@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             let productElement = document.createElement("div");
             productElement.className = "product";
             const productName = product.name || 'Nom de produit inconnu';
-            const productImage = product.image || 'path/to/your/default.jpg'; // Modifie cette ligne avec le chemin correct
+            const productImage = product.image || 'default.jpg'; // Assure-toi que le chemin est correct et que le fichier existe
             const productDescription = product.description || 'Pas de description disponible';
             const productPrice = product.price || 'Prix non disponible';
 

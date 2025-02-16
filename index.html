@@ -31,6 +31,18 @@
         <!-- Les produits seront affichés ici dynamiquement -->
     </section>
 
+    <!-- Ajout de la section pour afficher le contenu JSON -->
+    <pre id="products-json"></pre>
+
+    <!-- Formulaire pour ajouter un produit -->
+    <form id="add-product-form">
+        <input type="text" id="product-name" placeholder="Nom du produit" required>
+        <input type="number" id="product-price" placeholder="Prix du produit" required>
+        <input type="text" id="product-image" placeholder="URL de l'image">
+        <textarea id="product-description" placeholder="Description du produit" required></textarea>
+        <button type="submit">Ajouter le produit</button>
+    </form>
+
     <footer>
         <p>© 2025 MarcShop - Tous droits réservés</p>
         <a href="#">Télécharger l'application</a>

@@ -1,61 +1,52 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Chargement des scripts...");
+document.addEventListener('DOMContentLoaded', function() {
+    const productsContainer = document.getElementById("products-container");
 
-    const signupForm = document.getElementById("signup-form");
+    function getProducts() {
+        return JSON.parse(localStorage.getItem("products")) || [];
+    }
 
-    if (signupForm) {
-        signupForm.addEventListener("submit", function (e) {
-            e.preventDefault();
+    function displayProducts() {
+        let products = getProducts();
+        productsContainer.innerHTML = "";
 
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm-password").value;
+        if (products.length === 0) {
+            productsContainer.innerHTML = "<p>Aucun produit disponible.</p>";
+            return;
+        }
 
-            if (!validateEmail(email)) {
-                alert("Veuillez entrer une adresse e-mail valide.");
-                return;
-            }
-
-            if (!validatePassword(password)) {
-                alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.");
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert("Les mots de passe ne correspondent pas !");
-                return;
-            }
-
-            let users = JSON.parse(localStorage.getItem("users")) || [];
-
-            if (users.some(user => user.email === email)) {
-                alert("Cet e-mail est déjà utilisé !");
-                return;
-            }
-
-            const newUser = {
-                email: email,
-                password: hashPassword(password) 
-            };
-
-            users.push(newUser);
-            localStorage.setItem("users", JSON.stringify(users));
-
-            alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-            window.location.href = "connexion.html"; 
+        products.forEach(product => {
+            let productElement = document.createElement("div");
+            productElement.className = "product";
+            productElement.innerHTML = `
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>Prix : ${product.price} $</p>
+                <img src="${product.image}" alt="${product.name}">
+                <button onclick="addToCart('${product.name}')">Ajouter au panier</button>
+            `;
+            productsContainer.appendChild(productElement);
         });
     }
+
+    displayProducts();
 });
 
-function validateEmail(email) {
-    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return re.test(email);
-}
+function addToCart(productName) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let products = JSON.parse(localStorage.getItem("products")) || [];
 
-function validatePassword(password) {
-    return password.length >= 8 && /[A-Z]/.test(password) && /\d/.test(password);
-}
+    let product = products.find(p => p.name === productName);
+    let cartItem = cart.find(p => p.name === productName);
 
-function hashPassword(password) {
-    return btoa(password); // Base64 (non sécurisé mais illustratif)
+    if (cartItem) {
+        cartItem.quantity += 1;
+    } else {
+        cart.push({
+            ...product,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Produit ajouté au panier !");
 }

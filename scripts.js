@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const productsContainer = document.getElementById("products-container");
 
     async function fetchProducts() {
-        const response = await fetch("path/to/your/produits.json");
+        const response = await fetch("produits.json"); // Modifie cette ligne avec le chemin correct
         const products = await response.json();
         localStorage.setItem("products", JSON.stringify(products));
         return products;

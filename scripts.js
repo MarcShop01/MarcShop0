@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             productsContainer.appendChild(productElement);
         });
+
+        // Ajustement pour les appareils mobiles
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.product').forEach(product => {
+                product.style.width = '100%';
+                product.style.marginBottom = '20px';
+            });
+        }
     }
 
     displayProducts();

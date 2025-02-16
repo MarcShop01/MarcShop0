@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const productsContainer = document.getElementById("products-container");
+    const productsJsonContainer = document.getElementById("products-json");
+    const addProductForm = document.getElementById("add-product-form");
 
     async function fetchProducts() {
         try {
@@ -37,35 +39,38 @@ document.addEventListener('DOMContentLoaded', async function() {
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
-            const productName = product.name || 'Nom de produit inconnu';
-            const productImage = product.image || 'default.jpg';
-            const productDescription = product.description || 'Pas de description disponible';
-            const productPrice = product.price || 'Prix non disponible';
-
-            // Journaliser les valeurs des variables
-            console.log("Nom du produit : ", productName);
-            console.log("Image du produit : ", productImage);
-            console.log("Description du produit : ", productDescription);
-            console.log("Prix du produit : ", productPrice);
-
             productElement.innerHTML = `
-                <h3>${productName}</h3>
-                <p>${productDescription}</p>
-                <p>Prix : ${productPrice} $</p>
-                <img src="${productImage}" alt="${productName}">
-                <button onclick="addToCart('${productName}')">Ajouter au panier</button>
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>Prix : ${product.price} $</p>
+                <img src="${product.image}" alt="${product.name}">
+                <button onclick="addToCart('${product.name}')">Ajouter au panier</button>
             `;
             productsContainer.appendChild(productElement);
         });
-
-        // Ajustement pour les appareils mobiles
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.product').forEach(product => {
-                product.style.width = '100%';
-                product.style.marginBottom = '20px';
-            });
-        }
     }
+
+    function updateJsonDisplay(products) {
+        productsJsonContainer.textContent = JSON.stringify(products, null, 4);
+    }
+
+    addProductForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        let products = getProducts();
+
+        const newProduct = {
+            id: products.length + 1,
+            name: document.getElementById("product-name").value,
+            price: document.getElementById("product-price").value,
+            image: document.getElementById("product-image").value,
+            description: document.getElementById("product-description").value
+        };
+
+        products.push(newProduct);
+        localStorage.setItem("products", JSON.stringify(products));
+        displayProducts();
+        updateJsonDisplay(products);
+    });
 
     displayProducts();
 });

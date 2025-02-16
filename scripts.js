@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     async function fetchProducts() {
         try {
-            const response = await fetch("produits.json"); // Assure-toi que le chemin est correct
+            const response = await fetch("produits.json");
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             let productElement = document.createElement("div");
             productElement.className = "product";
             const productName = product.name || 'Nom de produit inconnu';
-            const productImage = product.image || 'default.jpg'; // Assure-toi que le chemin est correct et que le fichier existe
+            const productImage = product.image || 'default.jpg';
             const productDescription = product.description || 'Pas de description disponible';
             const productPrice = product.price || 'Prix non disponible';
 

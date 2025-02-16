@@ -1,10 +1,10 @@
 [
     {
-        "id": 1,
-        "name": "Produit 1",
-        "price": 20,
-        "image": "https://i.imgur.com/gQ4hIuG.jpeg",
-        "description": "Description de Produit 1"
+        "id": MS000001,
+        "name": "Baskets à lacets",
+        "price": 16,
+        "image": "https://i.imgur.com/uZu3blu.jpeg",
+        "description": "Baskets pour homme style rétro, size 38-44"
     },
     {
         "id": 2,

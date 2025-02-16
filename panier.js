@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
             totalPrice += product.price * product.quantity;
         });
 
-        totalPriceElement.textContent = Total: ${totalPrice} $;
+        totalPriceElement.textContent = `Total: ${totalPrice} $`; // Correction apportée ici
     }
 
     function updateQuantity(index, newQuantity) {

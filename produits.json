@@ -1,6 +1,6 @@
 [
     {
-        "id": MS000001,
+        "id": "MS000001",
         "name": "Baskets à lacets",
         "price": 16,
         "image": "https://i.imgur.com/uZu3blu.jpeg",
@@ -21,3 +21,4 @@
         "description": "Description de Produit 3"
     }
 ]
+

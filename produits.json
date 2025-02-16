@@ -7,7 +7,7 @@
         "description": "Description de Produit 1"
     },
     {
-        "id": 2",
+        "id": 2,
         "name": "Produit 2",
         "price": 30,
         "image": "https://i.imgur.com/tonimage2.jpg",
@@ -17,6 +17,7 @@
         "id": 3,
         "name": "Produit 3",
         "price": 25,
+        "image": "default.jpg",
         "description": "Description de Produit 3"
     }
 ]

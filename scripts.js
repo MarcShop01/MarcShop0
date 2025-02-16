@@ -1,70 +1,59 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const productsContainer = document.getElementById("products-container");
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("add-product-form").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    async function fetchProducts() {
-        try {
-            const response = await fetch("produits.json"); // Assure-toi que le chemin est correct
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            const products = await response.json();
-            console.log("Produits chargés : ", products);
-            localStorage.setItem("products", JSON.stringify(products));
-            return products;
-        } catch (error) {
-            console.error("Erreur lors du chargement des produits : ", error);
-            return [];
-        }
-    }
+        let name = document.getElementById("product-name").value.trim();
+        let description = document.getElementById("product-description").value.trim();
+        let price = parseFloat(document.getElementById("product-price").value.trim());
+        let image = document.getElementById("product-image").value.trim();
 
-    function getProducts() {
-        return JSON.parse(localStorage.getItem("products")) || [];
-    }
-
-    async function displayProducts() {
-        let products = getProducts();
-        if (products.length === 0) {
-            products = await fetchProducts();
+        if (!name || !description || isNaN(price)) {
+            alert("Tous les champs sont requis !");
+            return;
         }
 
-        productsContainer.innerHTML = "";
+        if (!image) {
+            image = 'default.jpg';
+        }
+
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        let newProduct = {
+            name: name,
+            description: description,
+            price: price,
+            image: image
+        };
+
+        products.push(newProduct);
+        localStorage.setItem("products", JSON.stringify(products));
+
+        alert("Produit ajouté avec succès !");
+        displayProducts();
+    });
+
+    function displayProducts() {
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+        let productList = document.getElementById("product-list");
+        productList.innerHTML = "";
 
         if (products.length === 0) {
-            productsContainer.innerHTML = "<p>Aucun produit disponible.</p>";
+            productList.innerHTML = "<p>Aucun produit disponible.</p>";
             return;
         }
 
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
-            const productName = product.name || 'Nom de produit inconnu';
-            const productImage = product.image || 'default.jpg'; // Assure-toi que le chemin est correct et que le fichier existe
-            const productDescription = product.description || 'Pas de description disponible';
-            const productPrice = product.price || 'Prix non disponible';
-
-            // Journaliser les valeurs des variables
-            console.log("Nom du produit : ", productName);
-            console.log("Image du produit : ", productImage);
-            console.log("Description du produit : ", productDescription);
-            console.log("Prix du produit : ", productPrice);
-
+            const productImage = product.image || 'default.jpg';
             productElement.innerHTML = `
-                <h3>${productName}</h3>
-                <p>${productDescription}</p>
-                <p>Prix : ${productPrice} $</p>
-                <img src="${productImage}" alt="${productName}">
-                <button onclick="addToCart('${productName}')">Ajouter au panier</button>
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>Prix : ${product.price} $</p>
+                <img src="${productImage}" alt="${product.name}">
             `;
-            productsContainer.appendChild(productElement);
+            productList.appendChild(productElement);
         });
-
-        // Ajustement pour les appareils mobiles
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.product').forEach(product => {
-                product.style.width = '100%';
-                product.style.marginBottom = '20px';
-            });
-        }
     }
 
     displayProducts();

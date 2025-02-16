@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     async function fetchProducts() {
         try {
-            const response = await fetch("produits.json"); // Assurez-vous que le chemin est correct
+            const response = await fetch("produits.json"); // Assure-toi que le chemin est correct
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

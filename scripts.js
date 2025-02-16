@@ -37,9 +37,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
-            // Ajoute une vérification pour s'assurer que les variables ne sont pas undefined
             const productName = product.name || 'Nom de produit inconnu';
-            const productImage = product.image || 'default.jpg';
+            const productImage = product.image || 'path/to/your/default.jpg'; // Modifie cette ligne avec le chemin correct
             const productDescription = product.description || 'Pas de description disponible';
             const productPrice = product.price || 'Prix non disponible';
 

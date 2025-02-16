@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     async function fetchProducts() {
         try {
-            const response = await fetch("produits.json"); // Modifie cette ligne avec le chemin correct
+            const response = await fetch("produits.json"); // Assurez-vous que le chemin est correct
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
@@ -37,12 +37,18 @@ document.addEventListener('DOMContentLoaded', async function() {
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
+            // Ajoute une vérification pour s'assurer que les variables ne sont pas undefined
+            const productName = product.name || 'Nom de produit inconnu';
+            const productImage = product.image || 'default.jpg';
+            const productDescription = product.description || 'Pas de description disponible';
+            const productPrice = product.price || 'Prix non disponible';
+
             productElement.innerHTML = `
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p>Prix : ${product.price} $</p>
-                <img src="${product.image}" alt="${product.name}">
-                <button onclick="addToCart('${product.name}')">Ajouter au panier</button>
+                <h3>${productName}</h3>
+                <p>${productDescription}</p>
+                <p>Prix : ${productPrice} $</p>
+                <img src="${productImage}" alt="${productName}">
+                <button onclick="addToCart('${productName}')">Ajouter au panier</button>
             `;
             productsContainer.appendChild(productElement);
         });

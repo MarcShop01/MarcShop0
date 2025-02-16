@@ -2,6 +2,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const productsContainer = document.getElementById("products-container");
 
     function getProducts() {
+        // Si localStorage ne contient pas encore de produits, les initialiser
+        if (!localStorage.getItem("products")) {
+            const initialProducts = [
+                {
+                    id: 1,
+                    name: "Produit 1",
+                    price: 20,
+                    image: "https://i.imgur.com/tonimage1.jpg",
+                    description: "Description de Produit 1"
+                },
+                {
+                    id: 2,
+                    name: "Produit 2",
+                    price: 30,
+                    image: "https://i.imgur.com/tonimage2.jpg",
+                    description: "Description de Produit 2"
+                }
+            ];
+            localStorage.setItem("products", JSON.stringify(initialProducts));
+        }
         return JSON.parse(localStorage.getItem("products")) || [];
     }
 

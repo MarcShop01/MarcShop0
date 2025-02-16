@@ -1,32 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const productsContainer = document.getElementById("products-container");
 
+    async function fetchProducts() {
+        const response = await fetch("path/to/your/produits.json");
+        const products = await response.json();
+        localStorage.setItem("products", JSON.stringify(products));
+        return products;
+    }
+
     function getProducts() {
-        // Si localStorage ne contient pas encore de produits, les initialiser
-        if (!localStorage.getItem("products")) {
-            const initialProducts = [
-                {
-                    id: 1,
-                    name: "Produit 1",
-                    price: 20,
-                    image: "https://i.imgur.com/tonimage1.jpg",
-                    description: "Description de Produit 1"
-                },
-                {
-                    id: 2,
-                    name: "Produit 2",
-                    price: 30,
-                    image: "https://i.imgur.com/tonimage2.jpg",
-                    description: "Description de Produit 2"
-                }
-            ];
-            localStorage.setItem("products", JSON.stringify(initialProducts));
-        }
         return JSON.parse(localStorage.getItem("products")) || [];
     }
 
-    function displayProducts() {
+    async function displayProducts() {
         let products = getProducts();
+        if (products.length === 0) {
+            products = await fetchProducts();
+        }
+
         productsContainer.innerHTML = "";
 
         if (products.length === 0) {
@@ -58,23 +49,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     displayProducts();
 });
-
-function addToCart(productName) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let products = JSON.parse(localStorage.getItem("products")) || [];
-
-    let product = products.find(p => p.name === productName);
-    let cartItem = cart.find(p => p.name === productName);
-
-    if (cartItem) {
-        cartItem.quantity += 1;
-    } else {
-        cart.push({
-            ...product,
-            quantity: 1
-        });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Produit ajouté au panier !");
-}

@@ -39,11 +39,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         products.forEach(product => {
             let productElement = document.createElement("div");
             productElement.className = "product";
+            const productImage = product.image || 'default.jpg';
             productElement.innerHTML = `
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <p>Prix : ${product.price} $</p>
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${productImage}" alt="${product.name}">
                 <button onclick="addToCart('${product.name}')">Ajouter au panier</button>
             `;
             productsContainer.appendChild(productElement);
@@ -61,8 +62,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         const newProduct = {
             id: products.length + 1,
             name: document.getElementById("product-name").value,
-            price: document.getElementById("product-price").value,
-            image: document.getElementById("product-image").value,
+            price: parseFloat(document.getElementById("product-price").value),
+            image: document.getElementById("product-image").value || 'default.jpg',
             description: document.getElementById("product-description").value
         };
 

@@ -42,6 +42,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             const productDescription = product.description || 'Pas de description disponible';
             const productPrice = product.price || 'Prix non disponible';
 
+            // Journaliser les valeurs des variables
+            console.log("Nom du produit : ", productName);
+            console.log("Image du produit : ", productImage);
+            console.log("Description du produit : ", productDescription);
+            console.log("Prix du produit : ", productPrice);
+
             productElement.innerHTML = `
                 <h3>${productName}</h3>
                 <p>${productDescription}</p>

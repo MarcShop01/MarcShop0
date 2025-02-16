@@ -2,10 +2,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     const productsContainer = document.getElementById("products-container");
 
     async function fetchProducts() {
-        const response = await fetch("produits.json"); // Modifie cette ligne avec le chemin correct
-        const products = await response.json();
-        localStorage.setItem("products", JSON.stringify(products));
-        return products;
+        try {
+            const response = await fetch("produits.json"); // Modifie cette ligne avec le chemin correct
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const products = await response.json();
+            console.log("Produits chargés : ", products);
+            localStorage.setItem("products", JSON.stringify(products));
+            return products;
+        } catch (error) {
+            console.error("Erreur lors du chargement des produits : ", error);
+            return [];
+        }
     }
 
     function getProducts() {

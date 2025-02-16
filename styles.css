@@ -98,6 +98,10 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .products {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
     .product {
         width: 100%;
         margin-bottom: 20px;

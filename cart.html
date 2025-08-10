@@ -3,164 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panier - Marcshop</title>
+    <title>Panier - MarcShop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=AX4iV51P3BZMi2XMsaCvCWpHRKzVLsXSBTpCiJg16aZ62_ToUcO3Y-KLtA3v_0rM_LHfM2W7dmGbsOZF&currency=USD"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
-<body>
-    <!-- Bannière de livraison en haut -->
-    <div class="delivery-banner">
-        <i class="fas fa-truck"></i> LIVRAISON GRATUITE SUR TOUTES LES COMMANDES
-    </div>
-
-    <!-- En-tête doré -->
-    <header class="gold-header">
-        <div class="welcome-text">
-            <h1>Marcshop</h1>
-            <p>Votre panier</p>
-        </div>
-        
-        <div class="search-bar">
-            <input type="text" placeholder="Rechercher des produits...">
-            <button><i class="fas fa-search"></i></button>
-        </div>
-        
-        <div class="cart-icon">
-            <a href="cart.html" id="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+<body class="panier-page">
+    <header id="main-header">
+        <div class="header-top">
+            <div class="header-logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>MarcShop</span>
+            </div>
+            <div class="header-text">
+                <h1>Votre Panier MarcShop</h1>
+                <p>Livraison gratuite sur toutes les commandes !</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="header-action">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="panier.html" class="header-action cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Panier</span>
+                    <span class="cart-counter">0</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Navigation principale -->
-    <nav class="main-nav">
-        <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i> Accueil</a></li>
-            <li><a href="index.html#categories"><i class="fas fa-list"></i> Catégories</a></li>
-            <li><a href="index.html#deals"><i class="fas fa-tag"></i> Promotions</a></li>
-            <li><a href="index.html#new"><i class="fas fa-star"></i> Nouveautés</a></li>
-        </ul>
+    <nav class="panier-nav">
+        <a href="index.html" class="btn-accueil"><i class="fas fa-home"></i> Accueil</a>
+        <a href="suivi.html" class="btn-suivi"><i class="fas fa-truck"></i> Suivi commande</a>
     </nav>
 
-    <!-- Page panier -->
-    <section class="cart-page">
-        <div class="container">
-            <div class="cart-header">
-                <h1>Votre Panier</h1>
-            </div>
+    <main>
+        <div id="panier-container">
+            <h2><i class="fas fa-shopping-cart"></i> Votre panier (<span id="total-produits">0</span>)</h2>
+            <div id="contenu-panier"></div>
             
-            <div class="cart-container">
-                <div class="cart-items" id="cartItemsContainer">
-                    <!-- Les articles du panier seront chargés ici par JavaScript -->
-                </div>
-                
-                <div class="cart-summary">
-                    <h2>Résumé de la commande</h2>
-                    
-                    <div class="summary-details">
-                        <div class="summary-row">
-                            <span>Sous-total</span>
-                            <span id="subtotal">0.00 €</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Livraison</span>
-                            <span id="shipping">Gratuite</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Taxes</span>
-                            <span id="taxes">0.00 €</span>
-                        </div>
-                        <div class="summary-row summary-total">
-                            <span>Total</span>
-                            <span id="total">0.00 €</span>
-                        </div>
-                    </div>
-                    
-                    <div class="coupon-section">
-                        <h3>Code promo</h3>
-                        <div class="coupon-input">
-                            <input type="text" placeholder="Entrez votre code" id="couponCode">
-                            <button id="applyCoupon">Appliquer</button>
-                        </div>
-                    </div>
-                    
-                    <button class="checkout-btn" id="checkoutBtn">
-                        <i class="fas fa-lock"></i> Procéder au paiement
-                    </button>
-                    
-                    <div class="secure-payment">
-                        <i class="fas fa-shield-alt"></i> Paiement sécurisé
-                    </div>
+            <div class="totals-section">
+                <h3>Total: <span id="total-panier">0.00</span> $</h3>
+                <div class="panier-actions">
+                    <button id="vider-panier"><i class="fas fa-trash"></i> Vider le panier</button>
+                    <div id="paypal-button-container"></div>
                 </div>
             </div>
-            
-            <div class="recommendations">
-                <h2>Vous pourriez aussi aimer</极>
-                <div class="products-grid" id="recommendedProducts">
-                    <!-- Produits recommandés chargés par JavaScript -->
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>Marcshop</h3>
-                <p>Votre destination shopping premium pour des produits d'exception.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-pinterest"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3>Informations</h3>
-                <ul>
-                    <li><a href="#">À propos de nous</a></li>
-                    <li><a href="#">Livraison</a></li>
-                    <li><a href="#">Politique de confidentialité</a></li>
-                    <li><a href="#">Conditions d'utilisation</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Service Client</h3>
-                <ul>
-                    <li><a href="#">Contactez-nous</a></li>
-                    <li><a href="#">Retours et échanges</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Cartes cadeaux</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Mon Compte</h3>
-                <ul>
-                    <li><a href="#">Mon compte</a></li>
-                    <li><a href="#">Historique de commande</a></li>
-                    <li><a href="#">Liste de souhaits</a></li>
-                    <li><a href="#">Newsletter</a></li>
-                </ul>
-            </div>
+            <section id="commentaires-container">
+                <h2><i class="fas fa-comment"></i> Informations de livraison</h2>
+                <form id="commentaire-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nom"><i class="fas fa-user"></i> Nom complet</label>
+                            <input type="text" id="nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone"><i class="fas fa-phone"></i> Téléphone</label>
+                            <input type="tel" id="telephone" name="telephone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pays"><i class="fas fa-globe"></i> Pays</label>
+                            <input type="text" id="pays" name="pays" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ville"><i class="fas fa-city"></i> Ville</label>
+                            <input type="text" id="ville" name="ville" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adresse"><i class="fas fa-map-marker-alt"></i> Adresse</label>
+                            <input type="text" id="adresse" name="adresse" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="commentaire"><i class="fas fa-edit"></i> Instructions spéciales</label>
+                            <textarea id="commentaire" name="commentaire" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Finaliser la commande</button>
+                </form>
+            </section>
         </div>
-        <div class="copyright">
-            <p>&copy; 2023 Marcshop. Tous droits réservés.</p>
+    </main>
+
+    <footer id="mobile-footer">
+        <div class="mobile-menu">
+            <a href="index.html"><i class="fas fa-home"></i></a>
+            <a href="panier.html"><i class="fas fa-shopping-cart"></i></a>
+            <a href="https://wa.me/18093978951" target="_blank"><i class="fab fa-whatsapp"></i></a>
         </div>
     </footer>
 
-    <!-- Livraison gratuite en bas -->
-    <div class="free-delivery-footer">
-        <i class="fas fa-truck"></i> LIVRAISON GRATUITE SUR TOUTES LES COMMANDES
-    </div>
+    <div id="notification" class="notification"></div>
 
-    <!-- Navigation mobile en bas -->
-    <nav class="mobile-nav">
-        <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
-        <a href="#"><i class="fas fa-search"></i> Recherche</a>
-        <a href="cart.html" id="mobile-cart"><i class="fas fa-shopping-cart"></i> Panier</a>
-        <a href="index.html#contact"><i class="fas fa-user"></i> Contact</a>
-    </nav>
+    <footer class="main-footer">
+        <p>&copy; 2025 MarcShop. Tous droits réservés.</p>
+    </footer>
 
-    <script src="script.js"></script>
-    <script src="cart.js"></script>
+    <script src="panier.js"></script>
 </body>
 </html>

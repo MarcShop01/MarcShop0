@@ -3,51 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcShop - Boutique en ligne</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Marcshop - Boutique en ligne</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="logo">MarcShop</div>
-        <input type="text" id="search-bar" placeholder="Rechercher un produit...">
-        <nav>
-            <a href="accueil.html">Accueil</a>
-            <a href="produits.html">Produits</a>
-            <a href="categories.html">Catégories</a>
-            <a href="compte.html">Compte</a>
-            <a href="suivie.html">Suivie</a>
-            <a href="panier.html" id="cart-btn">Panier (<span id="cart-count">0</span>)</a>
-            <a href="admin.html" class="admin-button">🔧 Espace Admin</a> <!-- Bouton Administration -->
-        </nav>
+    <!-- Bannière de livraison en haut -->
+    <div class="delivery-banner">
+        <i class="fas fa-truck"></i> LIVRAISON GRATUITE SUR TOUTES LES COMMANDES
+    </div>
+
+    <!-- En-tête doré -->
+    <header class="gold-header">
+        <div class="welcome-text">
+            <h1>Bienvenue sur Marcshop</h1>
+            <p>L'excellence à portée de clic</p>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher des produits...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        
+        <div class="cart-icon">
+            <a href="cart.html" id="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+        </div>
     </header>
 
-    <section class="banner">
-        <h1>Bienvenue sur MarcShop</h1>
-        <p>Livraison gratuite sur toutes vos commandes !</p>
-    </section>
+    <!-- Navigation principale -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" class="active"><i class="fas fa-home"></i> Accueil</a></li>
+            <li><a href="#categories"><i class="fas fa-list"></i> Catégories</a></li>
+            <li><a href="#deals"><i class="fas fa-tag"></i> Promotions</a></li>
+            <li><a href="#new"><i class="fas fa-star"></i> Nouveautés</a></li>
+        </ul>
+    </nav>
 
-    <h2>Nos produits</h2>
-    <section class="products" id="products-container">
-        <!-- Les produits seront affichés ici dynamiquement -->
-    </section>
+    <!-- Contenu principal -->
+    <main>
+        <!-- Section Bannière -->
+        <section class="promo-banner">
+            <div class="banner-content">
+                <h2>COLLECTION EXCLUSIVE</h2>
+                <p>Des produits d'exception à prix exceptionnels</p>
+                <button>Découvrir la collection</button>
+            </div>
+        </section>
 
-    <!-- Ajout de la section pour afficher le contenu JSON -->
-    <pre id="products-json"></pre>
+        <!-- Section Catégories -->
+        <section id="categories" class="categories">
+            <h2>Catégories Populaires</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Montres">
+                    <h3>Montres</h3>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bijoux">
+                    <h3>Bijoux</h3>
+                </极
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1605733513597-a8f8341084e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Accessoires">
+                    <h3>Accessoires</h3>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Électronique">
+                    <h3>Électronique</h3>
+                </div>
+            </div>
+        </section>
 
-    <!-- Formulaire pour ajouter un produit -->
-    <form id="add-product-form">
-        <input type="text" id="product-name" placeholder="Nom du produit" required>
-        <input type="number" id="product-price" placeholder="Prix du produit" required>
-        <input type="text" id="product-image" placeholder="URL de l'image">
-        <textarea id="product-description" placeholder="Description du produit" required></textarea>
-        <button type="submit">Ajouter le produit</button>
-    </form>
+        <!-- Section Produits -->
+        <section id="products" class="products">
+            <div class="section-header">
+                <h2>Produits Populaires</h2>
+                <a href="#">Voir tout <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Produits chargés par JavaScript -->
+            </div>
+        </section>
 
-    <footer>
-        <p>© 2025 MarcShop - Tous droits réservés</p>
-        <a href="#">Télécharger l'application</a>
+        <!-- Section Promotion -->
+        <section id="deals" class="deals">
+            <div class="deal-content">
+                <h2>OFFRE EXCLUSIVE</h2>
+                <p>20% de réduction sur votre première commande</p>
+                <p>Code: MARC20</p>
+                <button>Profiter de l'offre</button>
+            </div>
+        </section>
+
+        <!-- Section Nouveautés -->
+        <section id="new" class="new-products">
+            <div class="section-header">
+                <h2>Nouveautés</h2>
+                <a href="#">Voir tout <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="new-products-grid">
+                <!-- Nouveaux produits -->
+            </div>
+        </section>
+
+        <!-- Section Contact -->
+        <section id="contact" class="contact">
+            <h2>Contactez-nous</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> contact@marcshop.com</p>
+                    <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
+                    <p><i class="fas fa-clock"></i> Lun-Ven: 9h-18h</p>
+                </div>
+                <form>
+                    <input type="text" placeholder="Votre nom" required>
+                    <input type="email" placeholder="Votre email" required>
+                    <textarea placeholder="Votre message" required></textarea>
+                    <button type="submit">Envoyer</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Marcshop</h3>
+                <p>Votre destination shopping premium pour des produits d'exception.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></极"
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Informations</h3>
+                <ul>
+                    <li><a href="#">À propos de nous</a></li>
+                    <li><a href="#">Livraison</a></li>
+                    <li><a href="#">Politique de confidentialité</a></li>
+                    <li><a href="#">Conditions d'utilisation</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Service Client</h3>
+                <ul>
+                    <li><a href="#">Contactez-nous</a></li>
+                    <li><a href="#">Retours et échanges</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Mon Compte</h3>
+                <ul>
+                    <li><a href="#">Mon compte</a></li>
+                    <li><a href="#">Historique de commande</a></li>
+                    <li><a href="#">Liste de souhaits</a></li>
+                    <li><a href="#">Newsletter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Marcshop. Tous droits réservés.</p>
+        </div>
     </footer>
 
-    <script src="scripts.js"></script>
+    <!-- Livraison gratuite en bas -->
+    <div class="free-delivery-footer">
+        <i class="fas fa-truck"></i> LIVRAISON GRATUITE SUR TOUTES LES COMMANDES
+    </div>
+
+    <!-- Navigation mobile en bas -->
+    <nav class="mobile-nav">
+        <a href="#"><i class="fas fa-home"></i> Accueil</a>
+        <a href="#"><i class="fas fa-search"></i> Recherche</a>
+        <a href="cart.html" id="mobile-cart"><i class="fas fa-shopping-cart"></i> Panier</a>
+        <a href="#contact"><i class="fas fa-user"></i> Contact</a>
+    </nav>
+
+    <script src="script.js"></script>
 </body>
 </html>

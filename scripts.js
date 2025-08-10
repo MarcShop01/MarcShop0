@@ -1,137 +1,454 @@
-// Données des produits (chargées depuis products.json)
-let produits = [];
+// Variables globales
+let tousLesProduits = [];
+let produitActuel = null;
+let lastScrollPosition = 0;
 
-// Gestion du panier
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// Initialisation EmailJS
+emailjs.init("YOUR_EMAILJS_USER_ID"); // Remplacez par votre ID
 
-// Chargement initial
-document.addEventListener('DOMContentLoaded', async () => {
-    // Charger les produits depuis le fichier JSON
-    try {
-        const response = await fetch('products.json');
-        produits = await response.json();
-        
-        displayProducts(produits, 'products-grid');
-        displayProducts(produits.slice(0, 4), 'new-products-grid');
-        updateCartCount();
-        setupEventListeners();
-    } catch (error) {
-        console.error('Erreur de chargement des produits:', error);
-    }
+// Au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    chargerProduits();
+    setupEventListeners();
+    checkSharedProduct();
+    initScrollHandler();
+    updateCartCounter(); // Initialiser le compteur
+    loadCategories(); // Charger les catégories
 });
 
-// Affichage des produits
-function displayProducts(products, containerId) {
-    const productsGrid = document.getElementById(containerId);
-    if (!productsGrid) return;
-    
-    productsGrid.innerHTML = '';
+// Charger les catégories
+function loadCategories() {
+    const categories = [
+        { name: "Vêtements", icon: "fas fa-tshirt" },
+        { name: "Électronique", icon: "fas fa-mobile-alt" },
+        { name: "Maison", icon: "fas fa-home" },
+        { name: "Livres", icon: "fas fa-book" },
+        { name: "Santé", icon: "fas fa-heartbeat" },
+        { name: "Sport", icon: "fas fa-futbol" }
+    ];
 
-    products.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        
-        const badge = product.id <= 3 ? `<div class="product-badge">Nouveau</div>` : '';
-        
-        productCard.innerHTML = `
-            ${badge}
-            <img src="${product.images[0]}" alt="${product.name}" class="product-image">
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <div class="product-price">
-                    <span class="current-price">${product.price.toFixed(2)} €</span>
-                </div>
-                <p class="description">${product.description}</p>
-                <button class="add-to-cart" data-id="${product.id}">
-                    <i class="fas fa-shopping-cart"></i> Ajouter
-                </button>
+    const container = document.querySelector('.categories-grid');
+    container.innerHTML = categories.map(cat => `
+        <div class="category-card">
+            <div class="category-icon">
+                <i class="${cat.icon}"></i>
             </div>
-        `;
-        productsGrid.appendChild(productCard);
+            <div class="category-name">${cat.name}</div>
+        </div>
+    `).join('');
+}
+
+// Gestion du scroll pour le menu mobile
+function initScrollHandler() {
+    const mobileFooter = document.getElementById('mobile-footer');
+    const header = document.getElementById('main-header');
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        
+        if (currentScroll > 100 && currentScroll > lastScrollPosition) {
+            mobileFooter.classList.add('show');
+            header.style.transform = 'translateY(-100%)';
+        } else {
+            mobileFooter.classList.remove('show');
+            header.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollPosition = currentScroll;
     });
 }
 
-// Configuration des écouteurs d'événements
+// Mettre à jour le compteur de panier
+function updateCartCounter() {
+    const panier = JSON.parse(localStorage.getItem('panier')) || [];
+    const totalItems = panier.reduce((total, item) => total + (item.quantity || 1), 0);
+    document.querySelectorAll('.cart-counter').forEach(counter => {
+        counter.textContent = totalItems;
+    });
+}
+
+// Charger les produits
+async function chargerProduits() {
+    try {
+        const response = await fetch('produits.json');
+        tousLesProduits = await response.json();
+        
+        // Ajouter un ID si manquant
+        tousLesProduits.forEach((prod, index) => {
+            if (!prod.id) prod.id = `prod_${index}`;
+            if (!prod.images) prod.images = [prod.image]; // Compatibilité avec l'ancien format
+        });
+        
+        afficherProduits(tousLesProduits);
+        afficherNouveautes();
+        afficherPromotions();
+    } catch (error) {
+        console.error("Erreur de chargement:", error);
+        document.getElementById('nouveautes').querySelector('.produits-grid').innerHTML = `
+            <div class="error">
+                Impossible de charger les produits. Rechargez la page.
+            </div>
+        `;
+    }
+}
+
+// Afficher les produits
+function afficherProduits(produitsAAfficher) {
+    const container = document.getElementById('produits-list');
+    if (!container) return;
+    
+    if (produitsAAfficher.length === 0) {
+        container.innerHTML = '<div class="no-results">Aucun produit trouvé</div>';
+        return;
+    }
+
+    container.innerHTML = produitsAAfficher.map(produit => `
+        <div class="product-card" data-id="${produit.id}">
+            ${produit.isNew ? '<span class="badge badge-new">Nouveau</span>' : ''}
+            ${produit.onSale ? '<span class="badge badge-sale">Promo</span>' : ''}
+            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
+                <img src="${escapeHtml(produit.images[0])}" 
+                     alt="${escapeHtml(produit.nom)}"
+                     class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
+                <div class="product-price">
+                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
+                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Afficher les nouveautés
+function afficherNouveautes() {
+    const nouveautes = tousLesProduits.filter(prod => prod.isNew);
+    const container = document.querySelector('#nouveautes .produits-grid');
+    if (!container) return;
+    
+    if (nouveautes.length === 0) {
+        container.innerHTML = '<div class="no-results">Aucune nouveauté</div>';
+        return;
+    }
+
+    container.innerHTML = nouveautes.map(produit => `
+        <div class="product-card" data-id="${produit.id}">
+            <span class="badge badge-new">Nouveau</span>
+            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
+                <img src="${escapeHtml(produit.images[0])}" 
+                     alt="${escapeHtml(produit.nom)}"
+                     class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
+                <div class="product-price">
+                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
+                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Afficher les promotions
+function afficherPromotions() {
+    const promotions = tousLesProduits.filter(prod => prod.onSale);
+    const container = document.querySelector('#promotions .produits-grid');
+    if (!container) return;
+    
+    if (promotions.length === 0) {
+        container.innerHTML = '<div class="no-results">Aucune promotion</div>';
+        return;
+    }
+
+    container.innerHTML = promotions.map(produit => `
+        <div class="product-card" data-id="${produit.id}">
+            <span class="badge badge-sale">Promo</span>
+            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
+                <img src="${escapeHtml(produit.images[0])}" 
+                     alt="${escapeHtml(produit.nom)}"
+                     class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
+                <div class="product-price">
+                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
+                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Configurer les événements
 function setupEventListeners() {
-    // Ajout au panier
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('add-to-cart') || 
-            e.target.closest('.add-to-cart')) {
-            
-            const button = e.target.closest('.add-to-cart');
-            const productId = parseInt(button.getAttribute('data-id'));
-            
-            addToCart(productId);
+    // Barre de recherche
+    document.getElementById('search-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const terme = document.getElementById('search-input').value.toLowerCase();
+        const produitsFiltres = tousLesProduits.filter(produit => 
+            produit.nom.toLowerCase().includes(terme) || 
+            (produit.description && produit.description.toLowerCase().includes(terme))
+        );
+        afficherProduits(produitsFiltres);
+    });
+
+    // Bouton recherche mobile
+    document.getElementById('mobile-search-btn')?.addEventListener('click', function() {
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            window.location.href = 'index.html#search-input';
         }
     });
 
-    // Recherche de produits
-    const searchButton = document.querySelector('.search-bar button');
-    const searchInput = document.querySelector('.search-bar input');
-    
-    if (searchButton) {
-        searchButton.addEventListener('click', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            alert(`Recherche pour: ${searchTerm}\nCette fonctionnalité sera implémentée prochainement!`);
-        });
-    }
+    // Boutons de la modale
+    document.getElementById('modal-add-to-cart')?.addEventListener('click', () => {
+        if (produitActuel) {
+            ajouterAuPanier(produitActuel.id);
+            closeModal();
+        }
+    });
 
-    if (searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const searchTerm = searchInput.value.toLowerCase();
-                alert(`Recherche pour: ${searchTerm}\nCette fonctionnalité sera implémentée prochainement!`);
-            }
-        });
-    }
+    document.getElementById('modal-share')?.addEventListener('click', partagerProduit);
+    
+    // Fermeture modale
+    document.getElementById('product-modal')?.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('product-modal')) {
+            closeModal();
+        }
+    });
+    
+    // Gestion du formulaire de contact
+    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message
+        };
+
+        emailjs.send("service_id", "template_id", templateParams)
+            .then(() => {
+                showNotification('Message envoyé avec succès !');
+                document.getElementById('contact-form').reset();
+            })
+            .catch(() => {
+                showNotification('Erreur lors de l\'envoi du message');
+            });
+    });
 }
 
-// Ajouter un produit au panier
-function addToCart(productId) {
-    const product = produits.find(p => p.id === productId);
-    if (!product) return;
+// Ouvrir la modale
+function openProductModal(productId, event = null) {
+    if (event) event.stopPropagation();
     
-    const existingItem = cart.find(item => item.id === productId);
+    produitActuel = tousLesProduits.find(p => p.id === productId);
+    if (!produitActuel) return;
+
+    document.getElementById('modal-title').textContent = produitActuel.nom;
+    document.getElementById('modal-price').innerHTML = `
+        <span class="current-price">${escapeHtml(produitActuel.prix)} $</span>
+        ${produitActuel.oldPrice ? `<span class="old-price">${escapeHtml(produitActuel.oldPrice)} $</span>` : ''}
+    `;
+    document.getElementById('modal-description').textContent = produitActuel.description || 'Aucune description disponible';
+    document.getElementById('modal-category').textContent = produitActuel.category || 'Non spécifiée';
+    document.getElementById('modal-availability').textContent = produitActuel.availability || 'En stock';
+    document.getElementById('modal-rating').textContent = produitActuel.rating || 'Non évalué';
+
+    const whatsappLink = document.getElementById('whatsapp-product-link');
+    whatsappLink.href = `https://wa.me/18093978951?text=${encodeURIComponent(
+        `Bonjour MarcShop! Je suis intéressé par votre produit "${produitActuel.nom}" (${produitActuel.prix}$). Pouvez-vous m'en dire plus ?`
+    )}`;
+
+    // Gestion des images
+    const thumbnailContainer = document.querySelector('.thumbnail-container');
+    const mainImage = document.getElementById('modal-main-image');
+    thumbnailContainer.innerHTML = '';
     
-    if (existingItem) {
-        existingItem.quantity += 1;
+    produitActuel.images.forEach((img, index) => {
+        const thumbnail = document.createElement('div');
+        thumbnail.className = 'thumbnail';
+        if (index === 0) thumbnail.classList.add('active');
+        
+        thumbnail.innerHTML = `<img src="${img}" alt="Miniature ${index + 1}">`;
+        
+        thumbnail.addEventListener('click', () => {
+            // Mettre à jour l'image principale
+            mainImage.src = img;
+            
+            // Mettre à jour les miniatures actives
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        });
+        
+        thumbnailContainer.appendChild(thumbnail);
+    });
+    
+    // Afficher la première image
+    if (produitActuel.images.length > 0) {
+        mainImage.src = produitActuel.images[0];
+    }
+    
+    // Ouvrir la modale
+    document.getElementById('product-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Fermer la modale
+function closeModal() {
+    document.getElementById('product-modal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Ajouter au panier (version améliorée)
+function ajouterAuPanier(productId, event = null) {
+    if (event) event.stopPropagation();
+    
+    const produit = tousLesProduits.find(p => p.id === productId);
+    if (!produit) return;
+
+    let panier = JSON.parse(localStorage.getItem('panier')) || [];
+    
+    // Vérifier si le produit existe déjà
+    const produitExistant = panier.find(p => p.id === productId);
+    
+    if (produitExistant) {
+        // Si oui, augmenter la quantité
+        produitExistant.quantity = (produitExistant.quantity || 1) + 1;
     } else {
-        cart.push({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.images[0],
-            quantity: 1
-        });
+        // Sinon, ajouter le produit avec quantité 1
+        const produitACopier = { ...produit };
+        produitACopier.quantity = 1;
+        panier.push(produitACopier);
     }
     
-    saveCart();
-    updateCartCount();
-    
-    // Animation de confirmation
-    const button = document.querySelector(`.add-to-cart[data-id="${productId}"]`);
-    if (button) {
-        button.innerHTML = '<i class="fas fa-check"></i> Ajouté';
-        button.style.background = '#2ed573';
-        button.style.color = '#000';
-        setTimeout(() => {
-            button.innerHTML = '<i class="fas fa-shopping-cart"></i> Ajouter';
-            button.style.background = '';
-            button.style.color = '';
-        }, 2000);
+    localStorage.setItem('panier', JSON.stringify(panier));
+    updateCartCounter(); // Mettre à jour le compteur
+    envoyerEmailNotification(produit);
+    showNotification(`${produit.nom} ajouté au panier !`);
+}
+
+// Envoyer l'email
+function envoyerEmailNotification(produit) {
+    const templateParams = {
+        to_email: "marcshop0705@gmail.com",
+        subject: `Nouvel achat: ${produit.nom}`,
+        message: `
+            Produit: ${produit.nom}
+            Prix: ${produit.prix}$
+            Image: ${produit.images[0]}
+            Date: ${new Date().toLocaleString()}
+        `
+    };
+
+    emailjs.send("marc1304", "template_zvo5tzs", templateParams)
+        .then(response => console.log("Email envoyé!", response))
+        .catch(error => console.error("Erreur email:", error));
+}
+
+// Partager produit
+async function partagerProduit() {
+    if (!produitActuel) return;
+
+    const urlPartage = `${window.location.origin}${window.location.pathname}?produit=${produitActuel.id}`;
+    const textePartage = `Découvrez "${produitActuel.nom}" à ${produitActuel.prix}$ sur MarcShop: ${urlPartage}`;
+
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: produitActuel.nom,
+                text: `Seulement ${produitActuel.prix}$ !`,
+                url: urlPartage
+            });
+        } else {
+            await navigator.clipboard.writeText(textePartage);
+            showNotification('Lien copié dans le presse-papiers !');
+        }
+    } catch (err) {
+        prompt('Copiez ce lien:', urlPartage);
     }
 }
 
-// Enregistrer le panier dans localStorage
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-// Mise à jour du compteur de panier
-function updateCartCount() {
-    const count = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartCountElement = document.getElementById('cart-count');
-    if (cartCountElement) {
-        cartCountElement.textContent = count;
+// Vérifier le produit partagé
+function checkSharedProduct() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const produitId = urlParams.get('produit');
+    
+    if (produitId) {
+        const produit = tousLesProduits.find(p => p.id === produitId);
+        if (produit) {
+            openProductModal(produitId);
+            history.replaceState(null, '', window.location.pathname);
+        }
     }
 }
+
+// Afficher notification
+function showNotification(message) {
+    const notif = document.getElementById('notification');
+    if (notif) {
+        notif.textContent = message;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 3000);
+    }
+}
+
+// Sécurité HTML
+function escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') return unsafe;
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Fonctions globales
+window.openProductModal = openProductModal;
+window.closeModal = closeModal;
+window.ajouterAuPanier = ajouterAuPanier;

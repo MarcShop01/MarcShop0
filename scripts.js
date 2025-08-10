@@ -1,81 +1,137 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const productsContainer = document.getElementById("products-container");
-    const productsJsonContainer = document.getElementById("products-json");
-    const addProductForm = document.getElementById("add-product-form");
+// Données des produits (chargées depuis products.json)
+let produits = [];
 
-    if (productsContainer && productsJsonContainer && addProductForm) {
-        async function fetchProducts() {
-            try {
-                const response = await fetch("produits.json");
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                const products = await response.json();
-                console.log("Produits chargés : ", products);
-                localStorage.setItem("products", JSON.stringify(products));
-                return products;
-            } catch (error) {
-                console.error("Erreur lors du chargement des produits : ", error);
-                return [];
-            }
-        }
+// Gestion du panier
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        function getProducts() {
-            return JSON.parse(localStorage.getItem("products")) || [];
-        }
-
-        async function displayProducts() {
-            let products = getProducts();
-            if (products.length === 0) {
-                products = await fetchProducts();
-            }
-
-            productsContainer.innerHTML = "";
-
-            if (products.length === 0) {
-                productsContainer.innerHTML = "<p>Aucun produit disponible.</p>";
-                return;
-            }
-
-            products.forEach(product => {
-                let productElement = document.createElement("div");
-                productElement.className = "product";
-                const productImage = product.image || 'default.jpg';
-                productElement.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <p>Prix : ${product.price} $</p>
-                    <img src="${productImage}" alt="${product.name}">
-                    <button onclick="addToCart('${product.name}')">Ajouter au panier</button>
-                `;
-                productsContainer.appendChild(productElement);
-            });
-        }
-
-        function updateJsonDisplay(products) {
-            productsJsonContainer.textContent = JSON.stringify(products, null, 4);
-        }
-
-        addProductForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            let products = getProducts();
-
-            const newProduct = {
-                id: products.length + 1,
-                name: document.getElementById("product-name").value,
-                price: parseFloat(document.getElementById("product-price").value),
-                image: document.getElementById("product-image").value || 'default.jpg',
-                description: document.getElementById("product-description").value
-            };
-
-            products.push(newProduct);
-            localStorage.setItem("products", JSON.stringify(products));
-            displayProducts();
-            updateJsonDisplay(products);
-        });
-
-        displayProducts();
-    } else {
-        console.error("Un des éléments nécessaires n'a pas été trouvé dans le DOM.");
+// Chargement initial
+document.addEventListener('DOMContentLoaded', async () => {
+    // Charger les produits depuis le fichier JSON
+    try {
+        const response = await fetch('products.json');
+        produits = await response.json();
+        
+        displayProducts(produits, 'products-grid');
+        displayProducts(produits.slice(0, 4), 'new-products-grid');
+        updateCartCount();
+        setupEventListeners();
+    } catch (error) {
+        console.error('Erreur de chargement des produits:', error);
     }
 });
+
+// Affichage des produits
+function displayProducts(products, containerId) {
+    const productsGrid = document.getElementById(containerId);
+    if (!productsGrid) return;
+    
+    productsGrid.innerHTML = '';
+
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        const badge = product.id <= 3 ? `<div class="product-badge">Nouveau</div>` : '';
+        
+        productCard.innerHTML = `
+            ${badge}
+            <img src="${product.images[0]}" alt="${product.name}" class="product-image">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <div class="product-price">
+                    <span class="current-price">${product.price.toFixed(2)} €</span>
+                </div>
+                <p class="description">${product.description}</p>
+                <button class="add-to-cart" data-id="${product.id}">
+                    <i class="fas fa-shopping-cart"></i> Ajouter
+                </button>
+            </div>
+        `;
+        productsGrid.appendChild(productCard);
+    });
+}
+
+// Configuration des écouteurs d'événements
+function setupEventListeners() {
+    // Ajout au panier
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('add-to-cart') || 
+            e.target.closest('.add-to-cart')) {
+            
+            const button = e.target.closest('.add-to-cart');
+            const productId = parseInt(button.getAttribute('data-id'));
+            
+            addToCart(productId);
+        }
+    });
+
+    // Recherche de produits
+    const searchButton = document.querySelector('.search-bar button');
+    const searchInput = document.querySelector('.search-bar input');
+    
+    if (searchButton) {
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            alert(`Recherche pour: ${searchTerm}\nCette fonctionnalité sera implémentée prochainement!`);
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = searchInput.value.toLowerCase();
+                alert(`Recherche pour: ${searchTerm}\nCette fonctionnalité sera implémentée prochainement!`);
+            }
+        });
+    }
+}
+
+// Ajouter un produit au panier
+function addToCart(productId) {
+    const product = produits.find(p => p.id === productId);
+    if (!product) return;
+    
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+            quantity: 1
+        });
+    }
+    
+    saveCart();
+    updateCartCount();
+    
+    // Animation de confirmation
+    const button = document.querySelector(`.add-to-cart[data-id="${productId}"]`);
+    if (button) {
+        button.innerHTML = '<i class="fas fa-check"></i> Ajouté';
+        button.style.background = '#2ed573';
+        button.style.color = '#000';
+        setTimeout(() => {
+            button.innerHTML = '<i class="fas fa-shopping-cart"></i> Ajouter';
+            button.style.background = '';
+            button.style.color = '';
+        }, 2000);
+    }
+}
+
+// Enregistrer le panier dans localStorage
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Mise à jour du compteur de panier
+function updateCartCount() {
+    const count = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+    }
+}

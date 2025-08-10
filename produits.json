@@ -1,23 +1,98 @@
 [
     {
-        "id": "MS000001",
-        "name": "Baskets à lacets",
-        "price": 16,
-        "image": "https://i.imgur.com/uZu3blu.jpeg",
-        "description": "Baskets pour homme style rétro, size 38-44"
+        "id": 1,
+        "name": "Montre Or Élégante",
+        "price": 249.99,
+        "description": "Montre en or avec cadran saphir, étanche 50m",
+        "images": [
+            "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1539874754764-5a96559165b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1605812860427-4024433a70fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
     },
     {
         "id": 2,
-        "name": "Produit 2",
-        "price": 30,
-        "image": "https://i.imgur.com/tonimage2.jpg",
-        "description": "Description de Produit 2"
+        "name": "Bracelet en Or 18K",
+        "price": 189.99,
+        "description": "Bracelet en or massif avec fermoir sécurisé",
+        "images": [
+            "https://images.unsplash.com/photo-1611348524140-6bfe58d7a994?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1589128777073-263566ae5e4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1605100945271-8f4ab704d259?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
     },
     {
         "id": 3,
-        "name": "Produit 3",
-        "price": 25,
-        "image": "default.jpg",
-        "description": "Description de Produit 3"
+        "name": "Boucles d'Oreilles Diamant",
+        "price": 349.99,
+        "description": "Boucles en or blanc avec diamants incrustés",
+        "images": [
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1617119319231-9d69730d1d55?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1601924621655-03a2fca1b1c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1601924994987-69e26d50dc3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Stylo Plume Luxe",
+        "price": 159.99,
+        "description": "Stylo plume en or massif avec gravure personnalisée",
+        "images": [
+            "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583485088067-9d5ffadb5b0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583485088151-2c8b2d1b0d7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583485088138-8f4e8e0e7f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Porte-Cartes en Cuir",
+        "price": 89.99,
+        "description": "Porte-cartes en cuir de veau avec détails or",
+        "images": [
+            "https://images.unsplash.com/photo-1600857062241-98c2aae9d15f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600857062280-0c8a41d2d3d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600857062300-3e5a5f5a5f5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600857062310-3e5a5f5a5f5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Lunettes de Soleil Or",
+        "price": 199.99,
+        "description": "Lunettes de soleil avec monture dorée et verres polarisés",
+        "images": [
+            "https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1577803645789-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1577803645790-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1577803645791-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Collier Pendentif Or",
+        "price": 229.99,
+        "description": "Collier en or avec pendentif saphir, longueur ajustable",
+        "images": [
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1599643478519-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1599643478520-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1599643478521-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Ceinture Cuir Boucle Or",
+        "price": 129.99,
+        "description": "Ceinture en cuir véritable avec boucle en or plaqué",
+        "images": [
+            "https://images.unsplash.com/photo-1591369822090-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1591369822091-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1591369822092-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1591369822093-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ]
     }
 ]

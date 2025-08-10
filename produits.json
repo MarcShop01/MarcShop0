@@ -1,98 +1,100 @@
 [
     {
-        "id": 1,
-        "name": "Montre Or Élégante",
-        "price": 249.99,
-        "description": "Montre en or avec cadran saphir, étanche 50m",
+        "id": "prod_1",
+        "nom": "iPhone 14 Plus",
+        "prix": 510.00,
+        "oldPrice": 560.00,
+        "description": "iPhone 14 Plus 128GB/256GB avec 45 jours de garantie. Écran Super Retina XDR, puissante puce A15 Bionic, système de caméra avancé.",
         "images": [
-            "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1539874754764-5a96559165b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1605812860427-4024433a70fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/VQaY9eb.jpeg",
+            "https://i.imgur.com/iphone14_2.jpg",
+            "https://i.imgur.com/iphone14_3.jpg",
+            "https://i.imgur.com/iphone14_4.jpg"
+        ],
+        "category": "Électronique",
+        "rating": 4.8,
+        "availability": "En stock",
+        "isNew": true,
+        "onSale": true
     },
     {
-        "id": 2,
-        "name": "Bracelet en Or 18K",
-        "price": 189.99,
-        "description": "Bracelet en or massif avec fermoir sécurisé",
+        "id": "prod_2",
+        "nom": "iPhone XR",
+        "prix": 205.00,
+        "description": "iPhone XR 64GB avec 45 jours de garantie. Écran Liquid Retina HD, Face ID, puce A12 Bionic et batterie longue durée.",
         "images": [
-            "https://images.unsplash.com/photo-1611348524140-6bfe58d7a994?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1589128777073-263566ae5e4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1605100945271-8f4ab704d259?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/CCenhzT.jpeg",
+            "https://i.imgur.com/iphonexr_2.jpg",
+            "https://i.imgur.com/iphonexr_3.jpg",
+            "https://i.imgur.com/iphonexr_4.jpg"
+        ],
+        "category": "Électronique",
+        "rating": 4.5,
+        "availability": "En stock",
+        "onSale": true
     },
     {
-        "id": 3,
-        "name": "Boucles d'Oreilles Diamant",
-        "price": 349.99,
-        "description": "Boucles en or blanc avec diamants incrustés",
+        "id": "prod_3",
+        "nom": "iPhone 15 Pro Max",
+        "prix": 900.00,
+        "oldPrice": 980.00,
+        "description": "iPhone 15 Pro Max 256GB/512GB avec 45 jours de garantie. Écran ProMotion, puce A17 Pro, système de caméra professionnel et design en titane.",
         "images": [
-            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1617119319231-9d69730d1d55?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1601924621655-03a2fca1b1c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1601924994987-69e26d50dc3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/NLFrtCN.jpeg",
+            "https://i.imgur.com/iphone15pm_2.jpg",
+            "https://i.imgur.com/iphone15pm_3.jpg",
+            "https://i.imgur.com/iphone15pm_4.jpg"
+        ],
+        "category": "Électronique",
+        "rating": 4.9,
+        "availability": "En stock",
+        "isNew": true,
+        "onSale": true
     },
     {
-        "id": 4,
-        "name": "Stylo Plume Luxe",
-        "price": 159.99,
-        "description": "Stylo plume en or massif avec gravure personnalisée",
+        "id": "prod_4",
+        "nom": "Sac à Dos Antivol",
+        "prix": 26.00,
+        "description": "Sac à dos antivol pour ordinateur portable avec port USB, compartiment à fermeture éclair sécurisée et matériau résistant à l'eau.",
         "images": [
-            "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1583485088067-9d5ffadb5b0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1583485088151-2c8b2d1b0d7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1583485088138-8f4e8e0e7f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/Pz03uia.jpeg",
+            "https://i.imgur.com/sacados_2.jpg",
+            "https://i.imgur.com/sacados_3.jpg",
+            "https://i.imgur.com/sacados_4.jpg"
+        ],
+        "category": "Accessoires",
+        "rating": 4.3,
+        "availability": "En stock"
     },
     {
-        "id": 5,
-        "name": "Porte-Cartes en Cuir",
-        "price": 89.99,
-        "description": "Porte-cartes en cuir de veau avec détails or",
+        "id": "prod_5",
+        "nom": "Bottes Style Rétro",
+        "prix": 45.00,
+        "description": "Botillons pour Hommes Grande Taille Style Rétro Marron, semelle confortable, cuir véritable, idéal pour les activités décontractées.",
         "images": [
-            "https://images.unsplash.com/photo-1600857062241-98c2aae9d15f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600857062280-0c8a41d2d3d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600857062300-3e5a5f5a5f5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600857062310-3e5a5f5a5f5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/l9ImUNn.jpeg",
+            "https://i.imgur.com/bottes_2.jpg",
+            "https://i.imgur.com/bottes_3.jpg",
+            "https://i.imgur.com/bottes_4.jpg"
+        ],
+        "category": "Chaussures",
+        "rating": 4.6,
+        "availability": "En stock"
     },
     {
-        "id": 6,
-        "name": "Lunettes de Soleil Or",
-        "price": 199.99,
-        "description": "Lunettes de soleil avec monture dorée et verres polarisés",
+        "id": "prod_6",
+        "nom": "Ensemble de Bijoux",
+        "prix": 17.00,
+        "description": "Ensemble de bijoux de style 2025 : montre, collier avec croix, bracelet & chaîne. Matériaux : acier inoxydable plaqué or.",
         "images": [
-            "https://images.unsplash.com/photo-1577803645773-f96470509666?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1577803645789-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1577803645790-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1577803645791-3c5a5a5a5a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
-    },
-    {
-        "id": 7,
-        "name": "Collier Pendentif Or",
-        "price": 229.99,
-        "description": "Collier en or avec pendentif saphir, longueur ajustable",
-        "images": [
-            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1599643478519-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1599643478520-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1599643478521-a784e5dc4c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
-    },
-    {
-        "id": 8,
-        "name": "Ceinture Cuir Boucle Or",
-        "price": 129.99,
-        "description": "Ceinture en cuir véritable avec boucle en or plaqué",
-        "images": [
-            "https://images.unsplash.com/photo-1591369822090-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1591369822091-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1591369822092-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1591369822093-9e2a6159f9d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
-        ]
+            "https://i.imgur.com/g0FNtV4.jpeg",
+            "https://i.imgur.com/bijoux_2.jpg",
+            "https://i.imgur.com/bijoux_3.jpg",
+            "https://i.imgur.com/bijoux_4.jpg"
+        ],
+        "category": "Accessoires",
+        "rating": 4.4,
+        "availability": "En stock",
+        "onSale": true
     }
 ]

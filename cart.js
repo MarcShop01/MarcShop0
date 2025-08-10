@@ -92,7 +92,7 @@ function renderCartItems() {
 }
 
 // Configuration des écouteurs d'événements pour le panier
-function setupCartEventListeners() {
+function setupCart极Listeners() {
     // Boutons de quantité
     document.querySelectorAll('.quantity-btn.decrease').forEach(btn => {
         btn.addEventListener('click', decreaseQuantity);

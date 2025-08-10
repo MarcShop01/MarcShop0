@@ -69,7 +69,7 @@ body {
 
 .search-bar input {
     flex-grow: 1;
-    padding: 12极 15px;
+    padding: 12px 15px;
     border: none;
     border-radius: 30px 0 0 30px;
     font-size: 1rem;
@@ -138,7 +138,8 @@ body {
     font-size: 1.2rem;
 }
 
-.main-nav li a:hover, .main-nav li a.active {
+.main-nav li a:hover, .main极
+.main-nav li a.active {
     color: #FFD700;
 }
 
@@ -299,7 +300,6 @@ section {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-bottom: 1px solid #eee;
 }
 
 .product-info {
@@ -373,7 +373,7 @@ section {
 
 .deal-content p {
     font-size: 1.2rem;
-    margin-bottom: 10px;
+    margin-bottom: 10极
     font-weight: 500;
 }
 
@@ -644,11 +644,11 @@ section {
 .cart-summary {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 3极 15px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
     padding: 25px;
     height: fit-content;
     position: sticky;
-    top: 120极;
+    top: 120px;
 }
 
 .cart-summary h2 {
@@ -785,7 +785,7 @@ section {
     font-size: 1.3rem;
     color: #FFD700;
     border-bottom: 2px solid #D4AF37;
-    padding-bottom: 5px;
+    padding-bottom: 5极
     display: inline-block;
 }
 

@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-    <script src="scripts.js" defer></script>
 </head>
 <body>
     <!-- En-tête avec deux logos et recherche -->
@@ -28,19 +27,19 @@
                 </form>
             </div>
             <div class="header-actions">
-                <div class="header-action">
+                <a href="#" class="header-action">
                     <i class="fas fa-user"></i>
                     <span>Compte</span>
-                </div>
-                <div class="header-action">
+                </a>
+                <a href="#" class="header-action">
                     <i class="fas fa-heart"></i>
                     <span>Favoris</span>
-                </div>
-                <div class="header-action cart-icon">
+                </a>
+                <a href="panier.html" class="header-action cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Panier</span>
                     <span class="cart-counter">0</span>
-                </div>
+                </a>
             </div>
         </div>
         <div class="header-text">
@@ -219,7 +218,7 @@
             <a href="index.html" class="active"><i class="fas fa-home"></i><span>Accueil</span></a>
             <a href="#"><i class="fas fa-list"></i><span>Catégories</span></a>
             <a href="#promotions"><i class="fas fa-tag"></i><span>Promos</span></a>
-            <a href="#" class="cart-icon"><i class="fas fa-shopping-cart"></i><span>Panier</span></a>
+            <a href="panier.html" class="cart-icon"><i class="fas fa-shopping-cart"></i><span>Panier</span></a>
             <a href="#contact"><i class="fas fa-envelope"></i><span>Contact</span></a>
         </div>
     </footer>
@@ -290,5 +289,7 @@
     </div>
 
     <div id="notification" class="notification"></div>
+    
+    <script src="scripts.js"></script>
 </body>
 </html>

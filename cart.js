@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fonction pour afficher le panier
     function afficherPanier() {
         contenuPanier.innerHTML = "";
-        totalProduitsElement.textContent = panier.reduce((total, item) => total + (item.quantity || 1), 0);
+        const totalItems = panier.reduce((total, item) => total + (item.quantity || 1), 0);
+        totalProduitsElement.textContent = totalItems;
 
         if (panier.length === 0) {
             contenuPanier.innerHTML = '<p class="panier-vide">Votre panier est vide</p>';
@@ -33,10 +34,10 @@ document.addEventListener("DOMContentLoaded", function() {
             const produitElement = document.createElement("div");
             produitElement.className = "produit-panier";
             produitElement.innerHTML = `
-                <img src="${produit.image || 'images/default-product.jpg'}" alt="${produit.nom}" class="produit-image">
+                <img src="${produit.images?.[0] || 'images/default-product.jpg'}" alt="${produit.nom}" class="produit-image">
                 <div class="details">
                     <h3>${produit.nom}</h3>
-                    <p class="price">${parseFloat(produit.prix).toFixed(2)} $</p>
+                    <p class="price">${parseFloat(produit.prix).toFixed(2)} $ × ${produit.quantity || 1}</p>
                     ${produit.description ? `<p class="description">${produit.description}</p>` : ''}
                     <button class="retirer-produit" data-index="${index}">
                         <i class="fas fa-trash"></i> Retirer
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Calculer le total du panier
     function calculerTotal() {
-        const total = panier.reduce((sum, produit) => sum + (parseFloat(produit.prix) * (produit.quantity || 1), 0);
+        const total = panier.reduce((sum, produit) => sum + (parseFloat(produit.prix) * (produit.quantity || 1)), 0);
         totalPanierElement.textContent = total.toFixed(2);
         return total;
     }
@@ -152,7 +153,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 ${document.getElementById("ville").value || ''}
                 ${document.getElementById("pays").value || ''}
             `,
-            commande: JSON.stringify(panier),
+            commande: JSON.stringify(panier.map(p => ({
+                nom: p.nom,
+                prix: p.prix,
+                quantity: p.quantity || 1
+            }))),
             total: calculerTotal().toFixed(2),
             paypal_id: details.id,
             date: new Date().toLocaleString(),

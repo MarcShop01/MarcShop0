@@ -1121,13 +1121,19 @@ main {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#commentaires-container {
+    order: 1;
+    margin-top: 1rem;
 }
 
 .panier-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
+    order: 2;
+    margin-top: 0;
 }
 
 #vider-panier {
@@ -1152,7 +1158,7 @@ main {
     padding: 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
-    margin-bottom: 2rem;
+    margin-bottom: 0;
 }
 
 .form-grid {
@@ -1214,5 +1220,14 @@ main {
     .produit-image {
         width: 100%;
         height: auto;
+    }
+    
+    .totals-section {
+        flex-direction: column;
+    }
+    
+    #commentaires-container,
+    .panier-actions {
+        width: 100%;
     }
 }

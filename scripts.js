@@ -27,7 +27,9 @@ function loadCategories() {
         { name: "Sport", icon: "fas fa-futbol" }
     ];
 
-    const container = document.querySelector('.categories-grid');
+    const container = document.getElementById('categories-grid');
+    if (!container) return;
+    
     container.innerHTML = categories.map(cat => `
         <div class="category-card">
             <div class="category-icon">
@@ -42,6 +44,8 @@ function loadCategories() {
 function initScrollHandler() {
     const mobileFooter = document.getElementById('mobile-footer');
     const header = document.getElementById('main-header');
+    
+    if (!mobileFooter || !header) return;
     
     window.addEventListener('scroll', () => {
         const currentScroll = window.scrollY;
@@ -84,11 +88,14 @@ async function chargerProduits() {
         afficherPromotions();
     } catch (error) {
         console.error("Erreur de chargement:", error);
-        document.getElementById('nouveautes').querySelector('.produits-grid').innerHTML = `
-            <div class="error">
-                Impossible de charger les produits. Rechargez la page.
-            </div>
-        `;
+        const container = document.querySelector('#nouveautes .produits-grid');
+        if (container) {
+            container.innerHTML = `
+                <div class="error">
+                    Impossible de charger les produits. Rechargez la page.
+                </div>
+            `;
+        }
     }
 }
 
@@ -97,7 +104,7 @@ function afficherProduits(produitsAAfficher) {
     const container = document.querySelector('#nouveautes .produits-grid');
     if (!container) return;
     
-    if (produitsAAfficher.length === 0) {
+    if (!produitsAAfficher || produitsAAfficher.length === 0) {
         container.innerHTML = '<div class="no-results">Aucun produit trouvé</div>';
         return;
     }
@@ -135,6 +142,8 @@ function afficherProduits(produitsAAfficher) {
 
 // Afficher les nouveautés
 function afficherNouveautes() {
+    if (!tousLesProduits || tousLesProduits.length === 0) return;
+    
     const nouveautes = tousLesProduits.filter(prod => prod.isNew);
     const container = document.querySelector('#nouveautes .produits-grid');
     if (!container) return;
@@ -176,6 +185,8 @@ function afficherNouveautes() {
 
 // Afficher les promotions
 function afficherPromotions() {
+    if (!tousLesProduits || tousLesProduits.length === 0) return;
+    
     const promotions = tousLesProduits.filter(prod => prod.onSale);
     const container = document.querySelector('#promotions .produits-grid');
     if (!container) return;
@@ -218,57 +229,84 @@ function afficherPromotions() {
 // Configurer les événements
 function setupEventListeners() {
     // Barre de recherche
-    document.getElementById('search-form')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const terme = document.getElementById('search-input').value.toLowerCase();
-        const produitsFiltres = tousLesProduits.filter(produit => 
-            produit.nom.toLowerCase().includes(terme) || 
-            (produit.description && produit.description.toLowerCase().includes(terme))
-        );
-        afficherProduits(produitsFiltres);
-    });
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const terme = document.getElementById('search-input').value.toLowerCase();
+            const produitsFiltres = tousLesProduits.filter(produit => 
+                produit.nom.toLowerCase().includes(terme) || 
+                (produit.description && produit.description.toLowerCase().includes(terme))
+            );
+            afficherProduits(produitsFiltres);
+        });
+    }
+
+    // Bouton Catégories
+    const toggleButton = document.getElementById('toggle-categories');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+            const categoriesGrid = document.getElementById('categories-grid');
+            if (categoriesGrid) {
+                categoriesGrid.classList.toggle('hidden');
+                this.classList.toggle('active');
+            }
+        });
+    }
 
     // Boutons de la modale
-    document.getElementById('modal-add-to-cart')?.addEventListener('click', () => {
-        if (produitActuel) {
-            ajouterAuPanier(produitActuel.id);
-            closeModal();
-        }
-    });
+    const addToCartBtn = document.getElementById('modal-add-to-cart');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', () => {
+            if (produitActuel) {
+                ajouterAuPanier(produitActuel.id);
+                closeModal();
+            }
+        });
+    }
 
-    document.getElementById('modal-share')?.addEventListener('click', partagerProduit);
+    const shareBtn = document.getElementById('modal-share');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', partagerProduit);
+    }
     
     // Fermeture modale
-    document.getElementById('product-modal')?.addEventListener('click', (e) => {
-        if (e.target === document.getElementById('product-modal')) {
-            closeModal();
-        }
-    });
+    const productModal = document.getElementById('product-modal');
+    if (productModal) {
+        productModal.addEventListener('click', (e) => {
+            if (e.target === productModal) {
+                closeModal();
+            }
+        });
+    }
     
     // Gestion du formulaire de contact
-    document.getElementById('contact-form')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const subject = document.getElementById('subject').value;
-        const message = document.getElementById('message').value;
-        
-        const templateParams = {
-            from_name: name,
-            from_email: email,
-            subject: subject,
-            message: message
-        };
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            const templateParams = {
+                from_name: name,
+                from_email: email,
+                subject: subject,
+                message: message
+            };
 
-        emailjs.send("service_id", "template_id", templateParams)
-            .then(() => {
-                showNotification('Message envoyé avec succès !');
-                document.getElementById('contact-form').reset();
-            })
-            .catch(() => {
-                showNotification('Erreur lors de l\'envoi du message');
-            });
-    });
+            emailjs.send("service_id", "template_id", templateParams)
+                .then(() => {
+                    showNotification('Message envoyé avec succès !');
+                    contactForm.reset();
+                })
+                .catch(() => {
+                    showNotification('Erreur lors de l\'envoi du message');
+                });
+        });
+    }
 }
 
 // Ouvrir la modale
@@ -278,6 +316,7 @@ function openProductModal(productId, event = null) {
     produitActuel = tousLesProduits.find(p => p.id === productId);
     if (!produitActuel) return;
 
+    // Mettre à jour les informations du produit
     document.getElementById('modal-title').textContent = produitActuel.nom;
     document.getElementById('modal-price').innerHTML = `
         <span class="current-price">${escapeHtml(produitActuel.prix)} $</span>
@@ -288,49 +327,60 @@ function openProductModal(productId, event = null) {
     document.getElementById('modal-availability').textContent = produitActuel.availability || 'En stock';
     document.getElementById('modal-rating').textContent = produitActuel.rating || 'Non évalué';
 
+    // Lien WhatsApp
     const whatsappLink = document.getElementById('whatsapp-product-link');
-    whatsappLink.href = `https://wa.me/18093978951?text=${encodeURIComponent(
-        `Bonjour MarcShop! Je suis intéressé par votre produit "${produitActuel.nom}" (${produitActuel.prix}$). Pouvez-vous m'en dire plus ?`
-    )}`;
+    if (whatsappLink) {
+        whatsappLink.href = `https://wa.me/18093978951?text=${encodeURIComponent(
+            `Bonjour MarcShop! Je suis intéressé par votre produit "${produitActuel.nom}" (${produitActuel.prix}$). Pouvez-vous m'en dire plus ?`
+        )}`;
+    }
 
     // Gestion des images
     const thumbnailContainer = document.querySelector('.thumbnail-container');
     const mainImage = document.getElementById('modal-main-image');
-    thumbnailContainer.innerHTML = '';
-    
-    produitActuel.images.forEach((img, index) => {
-        const thumbnail = document.createElement('div');
-        thumbnail.className = 'thumbnail';
-        if (index === 0) thumbnail.classList.add('active');
+    if (thumbnailContainer && mainImage) {
+        thumbnailContainer.innerHTML = '';
         
-        thumbnail.innerHTML = `<img src="${img}" alt="Miniature ${index + 1}">`;
-        
-        thumbnail.addEventListener('click', () => {
-            // Mettre à jour l'image principale
-            mainImage.src = img;
+        produitActuel.images.forEach((img, index) => {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = 'thumbnail';
+            if (index === 0) thumbnail.classList.add('active');
             
-            // Mettre à jour les miniatures actives
-            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-            thumbnail.classList.add('active');
+            thumbnail.innerHTML = `<img src="${img}" alt="Miniature ${index + 1}">`;
+            
+            thumbnail.addEventListener('click', () => {
+                // Mettre à jour l'image principale
+                mainImage.src = img;
+                
+                // Mettre à jour les miniatures actives
+                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                thumbnail.classList.add('active');
+            });
+            
+            thumbnailContainer.appendChild(thumbnail);
         });
         
-        thumbnailContainer.appendChild(thumbnail);
-    });
-    
-    // Afficher la première image
-    if (produitActuel.images.length > 0) {
-        mainImage.src = produitActuel.images[0];
+        // Afficher la première image
+        if (produitActuel.images.length > 0) {
+            mainImage.src = produitActuel.images[0];
+        }
     }
     
     // Ouvrir la modale
-    document.getElementById('product-modal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
 }
 
 // Fermer la modale
 function closeModal() {
-    document.getElementById('product-modal').style.display = 'none';
-    document.body.style.overflow = 'auto';
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 }
 
 // Ajouter au panier
@@ -392,6 +442,7 @@ function checkSharedProduct() {
         const produit = tousLesProduits.find(p => p.id === produitId);
         if (produit) {
             openProductModal(produitId);
+            // Nettoyer l'URL
             history.replaceState(null, '', window.location.pathname);
         }
     }

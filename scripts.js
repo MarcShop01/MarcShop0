@@ -3,7 +3,7 @@ let tousLesProduits = [];
 let produitActuel = null;
 let lastScrollPosition = 0;
 
-// Initialisation EmailJS
+// Initialisation EmailJS avec votre User ID
 emailjs.init("s34yGCgjKesaY6sk_");
 
 // Au chargement de la page
@@ -294,15 +294,18 @@ function setupEventListeners() {
                 from_name: name,
                 from_email: email,
                 subject: subject,
-                message: message
+                message: message,
+                to_email: "marcshop0705@gmail.com" // Votre email
             };
 
-            emailjs.send("service_id", "template_id", templateParams)
+            // Envoyer le message via EmailJS
+            emailjs.send("service_abc123", "template_xyz456", templateParams)
                 .then(() => {
                     showNotification('Message envoyé avec succès !');
                     contactForm.reset();
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.error("Erreur d'envoi:", error);
                     showNotification('Erreur lors de l\'envoi du message');
                 });
         });

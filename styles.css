@@ -545,15 +545,25 @@ main {
     gap: 2rem;
 }
 
+.contact-info {
+    background: rgba(30, 30, 30, 0.8);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--primary);
+}
+
 .contact-info h3 {
     margin-bottom: 1.5rem;
     color: var(--primary);
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 .contact-item {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    align-items: center;
 }
 
 .contact-icon {
@@ -575,6 +585,21 @@ main {
 
 .contact-details p {
     color: var(--primary-light);
+    font-size: 1rem;
+}
+
+.contact-form {
+    background: rgba(30, 30, 30, 0.8);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--primary);
+}
+
+.contact-form h3 {
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 .contact-form .form-group {
@@ -613,6 +638,9 @@ main {
     cursor: pointer;
     font-weight: 500;
     transition: var(--transition);
+    width: 100%;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
 }
 
 .submit-btn:hover {
@@ -1001,6 +1029,10 @@ main {
     
     .nav-links {
         display: none;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -437,6 +437,7 @@ main {
     height: 200px;
     overflow: hidden;
     background: rgba(30, 30, 30, 0.7);
+    cursor: pointer;
 }
 
 .product-image {
@@ -1021,82 +1022,6 @@ main {
     opacity: 1;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 992px) {
-    .modal-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .nav-links {
-        display: none;
-    }
-    
-    .contact-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .header-top {
-        flex-wrap: wrap;
-    }
-    
-    .search-container {
-        order: 3;
-        margin: 1rem 0 0;
-        max-width: 100%;
-    }
-    
-    .produits-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
-    
-    .product-image-container {
-        height: 160px;
-    }
-    
-    .mobile-menu {
-        display: flex;
-    }
-    
-    #mobile-footer {
-        display: block;
-    }
-}
-
-@media (max-width: 576px) {
-    .header-text h1 {
-        font-size: 1.8rem;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-    }
-    
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .product-gallery {
-        grid-template-columns: 1fr;
-    }
-    
-    .thumbnail-container {
-        flex-direction: row;
-        overflow-x: auto;
-        padding-bottom: 10px;
-    }
-    
-    .thumbnail {
-        min-width: 60px;
-        height: 60px;
-    }
-    
-    .main-image {
-        height: 300px;
-    }
-}
-
 /* ===== STYLES POUR LE PANIER ===== */
 .panier-page {
     background: linear-gradient(135deg, #121212, #000000);
@@ -1292,22 +1217,183 @@ main {
     color: white;
 }
 
-/* Responsive pour le panier */
+/* ====================== */
+/* CORRECTIONS MOBILE     */
+/* ====================== */
+
+/* Grille de produits mobile */
 @media (max-width: 768px) {
-    .produit-panier {
-        flex-direction: column;
-    }
-    .produit-image {
-        width: 100%;
-        height: auto;
+    .produits-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
     }
     
-    .totals-section {
+    .product-card {
+        margin-bottom: 0;
+    }
+    
+    .product-image-container {
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .produits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .product-image-container {
+        height: 130px;
+    }
+    
+    .product-info {
+        padding: 0.8rem;
+    }
+    
+    .product-title {
+        font-size: 1rem;
+        height: 2.8rem;
+    }
+    
+    .current-price {
+        font-size: 1rem;
+    }
+    
+    .old-price {
+        font-size: 0.8rem;
+    }
+    
+    .product-actions {
+        flex-wrap: wrap;
+    }
+    
+    .add-to-cart {
+        min-width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Modal mobile */
+@media (max-width: 992px) {
+    .modal-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .thumbnail-container {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    .thumbnail {
+        min-width: 60px;
+        height: 60px;
+    }
+    
+    .main-image {
+        height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-image {
+        height: 250px;
+    }
+    
+    .modal-actions {
         flex-direction: column;
     }
     
-    #commentaires-container,
-    .panier-actions {
-        width: 100%;
+    .modal-content {
+        width: 95%;
+    }
+}
+
+/* Menu mobile */
+@media (max-width: 768px) {
+    #mobile-footer {
+        display: block;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .header-top {
+        flex-wrap: wrap;
+    }
+    
+    .search-container {
+        order: 3;
+        margin: 1rem 0 0;
+        max-width: 100%;
+    }
+}
+
+/* Animation de zoom */
+.product-image-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.product-image {
+    transition: transform 0.5s ease;
+}
+
+.product-image-container:active .product-image {
+    transform: scale(1.1);
+}
+
+/* Bouton d'agrandissement mobile */
+.mobile-zoom-icon {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+@media (max-width: 768px) {
+    .mobile-zoom-icon {
+        display: flex;
+    }
+}
+
+/* Navigation simplifiée mobile */
+@media (max-width: 480px) {
+    .header-actions {
+        gap: 1rem;
+    }
+    
+    .header-action span {
+        display: none;
+    }
+    
+    .header-action i {
+        margin-bottom: 0;
+    }
+    
+    .header-logo {
+        font-size: 1.5rem;
+    }
+    
+    .header-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .header-text p {
+        font-size: 1rem;
     }
 }

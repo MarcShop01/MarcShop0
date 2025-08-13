@@ -11,6 +11,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        .contact-details a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .contact-details a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        .contact-icon {
+            transition: var(--transition);
+        }
+        
+        .contact-item:hover .contact-icon {
+            transform: scale(1.1);
+            background: rgba(212, 175, 55, 0.3);
+        }
+        
+        .contact-item:hover .contact-icon i {
+            color: var(--primary-light);
+        }
+        
+        #contact-map {
+            height: 200px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-top: 1rem;
+            border: 1px solid var(--primary);
+            background: rgba(40, 40, 40, 0.9);
+        }
+        
+        #map-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <!-- En-tête avec deux logos et recherche -->
@@ -109,7 +150,12 @@
                         </div>
                         <div class="contact-details">
                             <h4>Adresse</h4>
-                            <p>Santiago de los caballeros, gurabo calle 20</p>
+                            <p>
+                                <a href="#" id="show-address">Santiago de los caballeros, gurabo calle 20</a>
+                            </p>
+                            <div id="contact-map" class="hidden">
+                                <iframe id="map-frame" src="" frameborder="0" allowfullscreen></iframe>
+                            </div>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -118,7 +164,7 @@
                         </div>
                         <div class="contact-details">
                             <h4>Téléphone</h4>
-                            <p>+18093978951</p>
+                            <p><a href="tel:+18093978951">+18093978951</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -127,7 +173,7 @@
                         </div>
                         <div class="contact-details">
                             <h4>Email</h4>
-                            <p>marcshop0705@gmail.com</p>
+                            <p><a href="mailto:marcshop0705@gmail.com">marcshop0705@gmail.com</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -136,7 +182,7 @@
                         </div>
                         <div class="contact-details">
                             <h4>WhatsApp</h4>
-                            <p>+18093978951</p>
+                            <p><a href="#" id="whatsapp-contact">+18093978951</a></p>
                         </div>
                     </div>
                 </div>

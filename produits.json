@@ -19,14 +19,14 @@
     },
     {
         "id": "prod_2",
-        "nom": "iPhone XR",
-        "prix": 205.00,
-        "description": "iPhone XR 64GB avec 45 jours de garantie. Écran Liquid Retina HD, Face ID, puce A12 Bionic et batterie longue durée.",
+        "nom": "T-Shirt",
+        "prix": 10.00,
+        "description": "T-shirt noir, a manches courtes compression ultra fins, décontracté, size disponible M.",
         "images": [
-            "https://i.imgur.com/CCenhzT.jpeg",
-            "https://i.imgur.com/iphonexr_2.jpg",
-            "https://i.imgur.com/iphonexr_3.jpg",
-            "https://i.imgur.com/iphonexr_4.jpg"
+            "https://i.imgur.com/LAo9tgE.jpeg",
+            "https://i.imgur.com/HEn18hE.jpeg",
+            "https://i.imgur.com/NgeO0OD.jpeg",
+            "https://i.imgur.com/TDONyGi.jpeg"
         ],
         "category": "Électronique",
         "rating": 4.5,
@@ -98,6 +98,7 @@
         "onSale": true
     }
 ]
+
 
 
 

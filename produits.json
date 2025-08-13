@@ -28,7 +28,7 @@
             "https://i.imgur.com/NgeO0OD.jpeg",
             "https://i.imgur.com/TDONyGi.jpeg"
         ],
-        "category": "Électronique",
+        "category": "Vêtements",
         "rating": 4.5,
         "availability": "En stock",
         "onSale": true
@@ -98,6 +98,7 @@
         "onSale": true
     }
 ]
+
 
 
 

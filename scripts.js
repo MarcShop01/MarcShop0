@@ -14,7 +14,38 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollHandler();
     updateCartCounter();
     loadCategories();
+    setupContactActions();
 });
+
+// Configurer les actions de contact
+function setupContactActions() {
+    // Téléphone - lance l'appel
+    document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Action d'appel automatique grâce au href tel:
+        });
+    });
+    
+    // WhatsApp - ouvre la conversation
+    document.getElementById('whatsapp-contact').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open('https://wa.me/18093978951', '_blank');
+    });
+    
+    // Adresse - montre la carte
+    document.getElementById('show-address').addEventListener('click', (e) => {
+        e.preventDefault();
+        const mapContainer = document.getElementById('contact-map');
+        if (mapContainer.classList.contains('hidden')) {
+            const mapFrame = document.getElementById('map-frame');
+            mapFrame.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.435849383152!2d-70.694396!3d19.451775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eb1c5e5e0b1d7a5%3A0x9a1d3b1c1c1c1c1c!2sSantiago%20de%20los%20caballeros%2C%20gurabo%20calle%2020!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus';
+            mapContainer.classList.remove('hidden');
+        } else {
+            mapContainer.classList.add('hidden');
+        }
+    });
+}
 
 // Charger les catégories
 function loadCategories() {
@@ -295,7 +326,7 @@ function setupEventListeners() {
                 from_email: email,
                 subject: subject,
                 message: message,
-                to_email: "marcshop0705@gmail.com" // Votre email
+                to_email: "marcshop0705@gmail.com"
             };
 
             // Envoyer le message via EmailJS

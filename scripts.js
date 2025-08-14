@@ -7,7 +7,7 @@ let lastScrollPosition = 0;
 const emailjsConfig = {
     serviceID: "marc1304", // À remplacer par votre service ID
     templateID: "template_zvo5tzs", // À remplacer par votre template ID
-    userID: "templateparams" // Votre User ID
+    userID: "s34yGCgjKesaY6sk_" // Votre User ID
 };
 
 // Initialisation EmailJS avec votre User ID
@@ -569,5 +569,6 @@ function escapeHtml(unsafe) {
 window.openProductModal = openProductModal;
 window.closeModal = closeModal;
 window.ajouterAuPanier = ajouterAuPanier;
+
 
 

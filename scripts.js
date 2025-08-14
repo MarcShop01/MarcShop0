@@ -5,7 +5,7 @@ let lastScrollPosition = 0;
 
 // Configuration EmailJS
 const emailjsConfig = {
-    serviceID: "service_marcshop", // À remplacer par votre service ID
+    serviceID: "marc1304", // À remplacer par votre service ID
     templateID: "template_marcshop_contact", // À remplacer par votre template ID
     userID: "s34yGCgjKesaY6sk_" // Votre User ID
 };
@@ -569,3 +569,4 @@ function escapeHtml(unsafe) {
 window.openProductModal = openProductModal;
 window.closeModal = closeModal;
 window.ajouterAuPanier = ajouterAuPanier;
+

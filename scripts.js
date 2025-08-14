@@ -3,8 +3,15 @@ let tousLesProduits = [];
 let produitActuel = null;
 let lastScrollPosition = 0;
 
+// Configuration EmailJS
+const emailjsConfig = {
+    serviceID: "service_marcshop", // À remplacer par votre service ID
+    templateID: "template_marcshop_contact", // À remplacer par votre template ID
+    userID: "s34yGCgjKesaY6sk_" // Votre User ID
+};
+
 // Initialisation EmailJS avec votre User ID
-emailjs.init("s34yGCgjKesaY6sk_");
+emailjs.init(emailjsConfig.userID);
 
 // Au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,6 +52,92 @@ function setupContactActions() {
             mapContainer.classList.add('hidden');
         }
     });
+    
+    // Gestion du formulaire de contact
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            sendContactForm();
+        });
+    }
+}
+
+// Envoyer le formulaire de contact
+function sendContactForm() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+    
+    // Vérifier que tous les champs sont remplis
+    if (!name || !email || !subject || !message) {
+        showFormResult("Veuillez remplir tous les champs", "error");
+        return;
+    }
+    
+    // Afficher l'indicateur de chargement
+    showLoading(true);
+    
+    const templateParams = {
+        from_name: name,
+        from_email: email,
+        subject: subject,
+        message: message,
+        to_email: "marcshop0705@gmail.com",
+        reply_to: email
+    };
+
+    // Envoyer le message via EmailJS
+    emailjs.send(
+        emailjsConfig.serviceID, 
+        emailjsConfig.templateID, 
+        templateParams
+    )
+    .then(() => {
+        showFormResult("Message envoyé avec succès ! Nous vous répondrons bientôt.", "success");
+        document.getElementById('contact-form').reset();
+    })
+    .catch((error) => {
+        console.error("Erreur d'envoi:", error);
+        showFormResult("Erreur lors de l'envoi du message. Veuillez réessayer.", "error");
+    })
+    .finally(() => {
+        // Cacher l'indicateur de chargement
+        showLoading(false);
+    });
+}
+
+// Afficher/masquer l'indicateur de chargement
+function showLoading(show) {
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = submitBtn.querySelector('.submit-text');
+    const submitLoader = submitBtn.querySelector('.submit-loader');
+    
+    if (show) {
+        submitBtn.classList.add('form-loading');
+        submitText.style.display = 'none';
+        submitLoader.style.display = 'inline';
+        submitBtn.disabled = true;
+    } else {
+        submitBtn.classList.remove('form-loading');
+        submitText.style.display = 'inline';
+        submitLoader.style.display = 'none';
+        submitBtn.disabled = false;
+    }
+}
+
+// Afficher le résultat du formulaire
+function showFormResult(message, type) {
+    const resultDiv = document.getElementById('form-result');
+    resultDiv.textContent = message;
+    resultDiv.className = `form-result ${type}`;
+    
+    // Effacer le message après 5 secondes
+    setTimeout(() => {
+        resultDiv.textContent = '';
+        resultDiv.className = 'form-result';
+    }, 5000);
 }
 
 // Charger les catégories
@@ -308,37 +401,6 @@ function setupEventListeners() {
             if (e.target === productModal) {
                 closeModal();
             }
-        });
-    }
-    
-    // Gestion du formulaire de contact
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
-            const templateParams = {
-                from_name: name,
-                from_email: email,
-                subject: subject,
-                message: message,
-                to_email: "marcshop0705@gmail.com"
-            };
-
-            // Envoyer le message via EmailJS
-            emailjs.send("service_abc123", "template_xyz456", templateParams)
-                .then(() => {
-                    showNotification('Message envoyé avec succès !');
-                    contactForm.reset();
-                })
-                .catch((error) => {
-                    console.error("Erreur d'envoi:", error);
-                    showNotification('Erreur lors de l\'envoi du message');
-                });
         });
     }
 }

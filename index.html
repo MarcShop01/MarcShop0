@@ -104,6 +104,71 @@
         .form-loading .submit-loader {
             display: inline-block;
         }
+        
+        /* ===== RECHERCHE AVANCÉE ===== */
+        .search-container {
+            position: relative;
+        }
+        
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(40, 40, 40, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            border: 1px solid var(--primary);
+        }
+        
+        .search-suggestions.hidden {
+            display: none;
+        }
+        
+        .suggestion-item {
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .suggestion-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .suggestion-image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        
+        .suggestion-text {
+            flex: 1;
+        }
+        
+        .suggestion-name {
+            font-weight: 500;
+            color: var(--primary-light);
+        }
+        
+        .suggestion-price {
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+        
+        .no-suggestions {
+            padding: 1rem;
+            text-align: center;
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
@@ -119,6 +184,8 @@
                     <input type="text" id="search-input" placeholder="Rechercher un produit...">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>
+                <!-- Suggestions de recherche -->
+                <div id="search-suggestions" class="search-suggestions hidden"></div>
             </div>
             <div class="header-actions">
                 <a href="#" class="header-action">

@@ -22,7 +22,99 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartCounter();
     loadCategories();
     setupContactActions();
+    initSearch(); // Initialiser la recherche avancée
 });
+
+// Initialiser la recherche
+function initSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchSuggestions = document.getElementById('search-suggestions');
+    
+    if (!searchInput) return;
+    
+    // Gestion de l'input
+    searchInput.addEventListener('input', () => {
+        const terme = searchInput.value.trim().toLowerCase();
+        
+        if (terme.length > 0) {
+            showSearchSuggestions(terme);
+            searchSuggestions.classList.remove('hidden');
+        } else {
+            searchSuggestions.classList.add('hidden');
+        }
+    });
+    
+    // Gestion du clic en dehors des suggestions
+    document.addEventListener('click', (e) => {
+        if (!searchSuggestions.contains(e.target) && e.target !== searchInput) {
+            searchSuggestions.classList.add('hidden');
+        }
+    });
+    
+    // Gestion de la soumission du formulaire
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const terme = searchInput.value.trim().toLowerCase();
+            if (terme) {
+                performSearch(terme);
+                searchSuggestions.classList.add('hidden');
+            }
+        });
+    }
+}
+
+// Afficher les suggestions de recherche
+function showSearchSuggestions(terme) {
+    const suggestionsContainer = document.getElementById('search-suggestions');
+    if (!suggestionsContainer) return;
+    
+    // Filtrer les produits qui correspondent
+    const suggestions = tousLesProduits.filter(produit => 
+        produit.nom.toLowerCase().includes(terme) || 
+        (produit.description && produit.description.toLowerCase().includes(terme)) ||
+        (produit.category && produit.category.toLowerCase().includes(terme))
+    ).slice(0, 5); // Limiter à 5 résultats
+    
+    if (suggestions.length > 0) {
+        suggestionsContainer.innerHTML = suggestions.map(produit => `
+            <div class="suggestion-item" data-id="${produit.id}">
+                <img src="${escapeHtml(produit.images[0])}" alt="${escapeHtml(produit.nom)}" class="suggestion-image">
+                <div class="suggestion-text">
+                    <div class="suggestion-name">${escapeHtml(produit.nom)}</div>
+                    <div class="suggestion-price">${escapeHtml(produit.prix)} $</div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Ajouter les gestionnaires d'événements
+        document.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const productId = item.dataset.id;
+                openProductModal(productId);
+                document.getElementById('search-input').value = '';
+                suggestionsContainer.classList.add('hidden');
+            });
+        });
+    } else {
+        suggestionsContainer.innerHTML = '<div class="no-suggestions">Aucun produit trouvé</div>';
+    }
+}
+
+// Effectuer une recherche complète
+function performSearch(terme) {
+    const produitsFiltres = tousLesProduits.filter(produit => 
+        produit.nom.toLowerCase().includes(terme) || 
+        (produit.description && produit.description.toLowerCase().includes(terme)) ||
+        (produit.category && produit.category.toLowerCase().includes(terme))
+    );
+    
+    afficherProduits(produitsFiltres);
+    
+    // Faire défiler jusqu'à la section des produits
+    document.getElementById('nouveautes').scrollIntoView({ behavior: 'smooth' });
+}
 
 // Configurer les actions de contact
 function setupContactActions() {
@@ -30,7 +122,6 @@ function setupContactActions() {
     document.querySelectorAll('a[href^="tel:"]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            // Action d'appel automatique grâce au href tel:
         });
     });
     
@@ -352,17 +443,13 @@ function afficherPromotions() {
 
 // Configurer les événements
 function setupEventListeners() {
-    // Barre de recherche
+    // Barre de recherche (gérée dans initSearch)
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
         searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const terme = document.getElementById('search-input').value.toLowerCase();
-            const produitsFiltres = tousLesProduits.filter(produit => 
-                produit.nom.toLowerCase().includes(terme) || 
-                (produit.description && produit.description.toLowerCase().includes(terme))
-            );
-            afficherProduits(produitsFiltres);
+            performSearch(terme);
         });
     }
 
@@ -569,6 +656,3 @@ function escapeHtml(unsafe) {
 window.openProductModal = openProductModal;
 window.closeModal = closeModal;
 window.ajouterAuPanier = ajouterAuPanier;
-
-
-

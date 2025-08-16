@@ -328,6 +328,12 @@ main {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+.category-card.active {
+    border: 2px solid var(--primary) !important;
+    background: rgba(212, 175, 55, 0.1);
+    transform: scale(1.05);
+}
+
 .category-icon {
     background: rgba(212, 175, 55, 0.2);
     padding: 1.5rem;
@@ -1109,4 +1115,27 @@ main {
     .modal-content {
         width: 95%;
     }
+}
+
+/* ===== AJOUTS POUR LES CATEGORIES ===== */
+.category-card.active {
+    border: 2px solid var(--primary) !important;
+    background: rgba(212, 175, 55, 0.1);
+    transform: scale(1.05);
+}
+
+.category-card {
+    transition: all 0.3s ease;
+}
+
+.categories-grid:not(.hidden) {
+    display: grid !important;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--primary);
+    font-size: 1.2rem;
 }

@@ -234,13 +234,15 @@ function showFormResult(message, type) {
 // Charger les catégories
 function loadCategories() {
     const categories = [
-        { id: 'vetements', name: "Vêtements", icon: "fas fa-tshirt" },
-        { id: 'electronique', name: "Électronique", icon: "fas fa-mobile-alt" },
-        { id: 'maison', name: "Maison", icon: "fas fa-home" },
-        { id: 'livres', name: "Livres", icon: "fas fa-book" },
-        { id: 'sante', name: "Santé", icon: "fas fa-heartbeat" },
-        { id: 'sport', name: "Sport", icon: "fas fa-futbol" },
-        { id: 'alimentation', name: "Alimentation", icon: "fas fa-utensils" }
+        { id: 'Électronique', name: "Électronique", icon: "fas fa-laptop" },
+        { id: 'Vêtements', name: "Vêtements", icon: "fas fa-tshirt" },
+        { id: 'Accessoires', name: "Accessoires", icon: "fas fa-glasses" },
+        { id: 'Chaussures', name: "Chaussures", icon: "fas fa-shoe-prints" },
+        { id: 'Maison', name: "Maison", icon: "fas fa-home" },
+        { id: 'Livres', name: "Livres", icon: "fas fa-book" },
+        { id: 'Santé & Beauté', name: "Santé & Beauté", icon: "fas fa-heartbeat" },
+        { id: 'Sport', name: "Sport", icon: "fas fa-futbol" },
+        { id: 'Alimentation', name: "Alimentation", icon: "fas fa-utensils" }
     ];
 
     const container = document.getElementById('categories-grid');
@@ -324,13 +326,22 @@ function filterProducts(categoryId) {
     // Afficher les résultats
     renderProducts(nouveautes, nouveautesGrid);
     renderProducts(promotions, promotionsGrid);
+    
+    // Message si aucune nouveauté trouvée
+    if (nouveautes.length === 0) {
+        nouveautesGrid.innerHTML = '<div class="no-results">Aucune nouveauté dans cette catégorie</div>';
+    }
+    
+    // Message si aucune promotion trouvée
+    if (promotions.length === 0) {
+        promotionsGrid.innerHTML = '<div class="no-results">Aucune promotion dans cette catégorie</div>';
+    }
 }
 
 // Afficher les produits dans un conteneur donné
 function renderProducts(produits, container) {
     if (!produits || produits.length === 0) {
-        container.innerHTML = '<div class="no-results">Aucun produit trouvé</div>';
-        return;
+        return; // On gère les messages vides dans filterProducts
     }
 
     container.innerHTML = produits.map(produit => `
@@ -406,6 +417,10 @@ async function chargerProduits() {
             if (!prod.id) prod.id = `prod_${index}`;
             if (!prod.images) prod.images = [prod.image];
             if (!prod.category) prod.category = 'non-classe';
+            
+            // S'assurer que les propriétés isNew et onSale existent
+            if (prod.isNew === undefined) prod.isNew = false;
+            if (prod.onSale === undefined) prod.onSale = false;
         });
         
         // Afficher initialement toutes les catégories

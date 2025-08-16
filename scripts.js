@@ -5,9 +5,9 @@ let lastScrollPosition = 0;
 
 // Configuration EmailJS
 const emailjsConfig = {
-    serviceID: "marc1304", // À remplacer par votre service ID
-    templateID: "template_zvo5tzs", // À remplacer par votre template ID
-    userID: "s34yGCgjKesaY6sk_" // Votre User ID
+    serviceID: "marc1304",
+    templateID: "template_zvo5tzs",
+    userID: "s34yGCgjKesaY6sk_"
 };
 
 // Initialisation EmailJS avec votre User ID
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartCounter();
     loadCategories();
     setupContactActions();
-    initSearch(); // Initialiser la recherche avancée
+    initSearch();
 });
 
 // Initialiser la recherche
@@ -234,23 +234,132 @@ function showFormResult(message, type) {
 // Charger les catégories
 function loadCategories() {
     const categories = [
-        { name: "Vêtements", icon: "fas fa-tshirt" },
-        { name: "Électronique", icon: "fas fa-mobile-alt" },
-        { name: "Maison", icon: "fas fa-home" },
-        { name: "Livres", icon: "fas fa-book" },
-        { name: "Santé", icon: "fas fa-heartbeat" },
-        { name: "Sport", icon: "fas fa-futbol" }
+        { id: 'vetements', name: "Vêtements", icon: "fas fa-tshirt" },
+        { id: 'electronique', name: "Électronique", icon: "fas fa-mobile-alt" },
+        { id: 'maison', name: "Maison", icon: "fas fa-home" },
+        { id: 'livres', name: "Livres", icon: "fas fa-book" },
+        { id: 'sante', name: "Santé", icon: "fas fa-heartbeat" },
+        { id: 'sport', name: "Sport", icon: "fas fa-futbol" },
+        { id: 'alimentation', name: "Alimentation", icon: "fas fa-utensils" }
     ];
 
     const container = document.getElementById('categories-grid');
     if (!container) return;
     
-    container.innerHTML = categories.map(cat => `
-        <div class="category-card">
+    // Ajouter la catégorie "Toutes" par défaut
+    container.innerHTML = `
+        <div class="category-card active" data-category-id="all">
+            <div class="category-icon">
+                <i class="fas fa-th-large"></i>
+            </div>
+            <div class="category-name">Toutes</div>
+        </div>
+    ` + categories.map(cat => `
+        <div class="category-card" data-category-id="${cat.id}">
             <div class="category-icon">
                 <i class="${cat.icon}"></i>
             </div>
             <div class="category-name">${cat.name}</div>
+        </div>
+    `).join('');
+    
+    // Ajouter les écouteurs d'événements pour les catégories
+    setupCategoryButtons();
+}
+
+// Configurer les boutons de catégorie
+function setupCategoryButtons() {
+    const categoriesGrid = document.getElementById('categories-grid');
+    if (!categoriesGrid) return;
+
+    categoriesGrid.addEventListener('click', (e) => {
+        const categoryCard = e.target.closest('.category-card');
+        if (!categoryCard) return;
+
+        // Retirer la classe active de toutes les cartes
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        
+        // Ajouter la classe active à la carte cliquée
+        categoryCard.classList.add('active');
+        
+        // Filtrer les produits par catégorie
+        const categoryId = categoryCard.dataset.categoryId;
+        filterProducts(categoryId);
+    });
+
+    // Gestion du bouton "Voir tout"
+    const viewAllButton = document.querySelector('.view-all');
+    if (viewAllButton) {
+        viewAllButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            // Activer la catégorie "Toutes"
+            const allCategory = document.querySelector('.category-card[data-category-id="all"]');
+            if (allCategory) allCategory.classList.add('active');
+            filterProducts('all');
+        });
+    }
+}
+
+// Filtrer les produits par catégorie
+function filterProducts(categoryId) {
+    const nouveautesGrid = document.querySelector('#nouveautes .produits-grid');
+    const promotionsGrid = document.querySelector('#promotions .produits-grid');
+    
+    if (!nouveautesGrid || !promotionsGrid) return;
+
+    // Filtrer les produits
+    const nouveautes = categoryId === 'all' 
+        ? tousLesProduits.filter(p => p.isNew)
+        : tousLesProduits.filter(p => p.isNew && p.category === categoryId);
+    
+    const promotions = categoryId === 'all' 
+        ? tousLesProduits.filter(p => p.onSale)
+        : tousLesProduits.filter(p => p.onSale && p.category === categoryId);
+
+    // Afficher les résultats
+    renderProducts(nouveautes, nouveautesGrid);
+    renderProducts(promotions, promotionsGrid);
+}
+
+// Afficher les produits dans un conteneur donné
+function renderProducts(produits, container) {
+    if (!produits || produits.length === 0) {
+        container.innerHTML = '<div class="no-results">Aucun produit trouvé</div>';
+        return;
+    }
+
+    container.innerHTML = produits.map(produit => `
+        <div class="product-card" data-id="${produit.id}" data-category="${produit.category}">
+            ${produit.isNew ? '<span class="badge badge-new">Nouveau</span>' : ''}
+            ${produit.onSale ? '<span class="badge badge-sale">Promo</span>' : ''}
+            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
+                <img src="${escapeHtml(produit.images[0])}" 
+                     alt="${escapeHtml(produit.nom)}"
+                     class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
+                <div class="product-price">
+                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
+                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
+                </div>
+                <div class="product-actions">
+                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     `).join('');
 }
@@ -296,11 +405,11 @@ async function chargerProduits() {
         tousLesProduits.forEach((prod, index) => {
             if (!prod.id) prod.id = `prod_${index}`;
             if (!prod.images) prod.images = [prod.image];
+            if (!prod.category) prod.category = 'non-classe';
         });
         
-        afficherProduits(tousLesProduits);
-        afficherNouveautes();
-        afficherPromotions();
+        // Afficher initialement toutes les catégories
+        filterProducts('all');
     } catch (error) {
         console.error("Erreur de chargement:", error);
         const container = document.querySelector('#nouveautes .produits-grid');
@@ -312,133 +421,6 @@ async function chargerProduits() {
             `;
         }
     }
-}
-
-// Afficher les produits
-function afficherProduits(produitsAAfficher) {
-    const container = document.querySelector('#nouveautes .produits-grid');
-    if (!container) return;
-    
-    if (!produitsAAfficher || produitsAAfficher.length === 0) {
-        container.innerHTML = '<div class="no-results">Aucun produit trouvé</div>';
-        return;
-    }
-
-    container.innerHTML = produitsAAfficher.map(produit => `
-        <div class="product-card" data-id="${produit.id}">
-            ${produit.isNew ? '<span class="badge badge-new">Nouveau</span>' : ''}
-            ${produit.onSale ? '<span class="badge badge-sale">Promo</span>' : ''}
-            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
-                <img src="${escapeHtml(produit.images[0])}" 
-                     alt="${escapeHtml(produit.nom)}"
-                     class="product-image">
-            </div>
-            <div class="product-info">
-                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
-                <div class="product-price">
-                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
-                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Afficher les nouveautés
-function afficherNouveautes() {
-    if (!tousLesProduits || tousLesProduits.length === 0) return;
-    
-    const nouveautes = tousLesProduits.filter(prod => prod.isNew);
-    const container = document.querySelector('#nouveautes .produits-grid');
-    if (!container) return;
-    
-    if (nouveautes.length === 0) {
-        container.innerHTML = '<div class="no-results">Aucune nouveauté</div>';
-        return;
-    }
-
-    container.innerHTML = nouveautes.map(produit => `
-        <div class="product-card" data-id="${produit.id}">
-            <span class="badge badge-new">Nouveau</span>
-            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
-                <img src="${escapeHtml(produit.images[0])}" 
-                     alt="${escapeHtml(produit.nom)}"
-                     class="product-image">
-            </div>
-            <div class="product-info">
-                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
-                <div class="product-price">
-                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
-                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Afficher les promotions
-function afficherPromotions() {
-    if (!tousLesProduits || tousLesProduits.length === 0) return;
-    
-    const promotions = tousLesProduits.filter(prod => prod.onSale);
-    const container = document.querySelector('#promotions .produits-grid');
-    if (!container) return;
-    
-    if (promotions.length === 0) {
-        container.innerHTML = '<div class="no-results">Aucune promotion</div>';
-        return;
-    }
-
-    container.innerHTML = promotions.map(produit => `
-        <div class="product-card" data-id="${produit.id}">
-            <span class="badge badge-sale">Promo</span>
-            <div class="product-image-container" onclick="openProductModal('${produit.id}')">
-                <img src="${escapeHtml(produit.images[0])}" 
-                     alt="${escapeHtml(produit.nom)}"
-                     class="product-image">
-            </div>
-            <div class="product-info">
-                <h3 class="product-title">${escapeHtml(produit.nom)}</h3>
-                <div class="product-price">
-                    <span class="current-price">${escapeHtml(produit.prix)} $</span>
-                    ${produit.oldPrice ? `<span class="old-price">${escapeHtml(produit.oldPrice)} $</span>` : ''}
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart" onclick="ajouterAuPanier('${produit.id}', event)">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
-                    <button class="action-btn">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <button class="action-btn" onclick="openProductModal('${produit.id}', event)">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
 }
 
 // Configurer les événements
